@@ -6,7 +6,7 @@ import Stats from './components/Stats';
 import TopPages from './components/TopPages';
 export default function Home() {
   return <>
-      <PageMetaData title="Analytics" />
+      <PageMetaData title="Dashboard" />
 
       <Stats />
       <Row>

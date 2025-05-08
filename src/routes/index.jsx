@@ -6,12 +6,12 @@ const Analytics = lazy(() => import('@/app/(admin)/dashboard/analytics/page'));
 // const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
 // const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
 
-const Maintenance = lazy(() => import('@/app/(other)/maintenance/page'));
-const ComingSoon = lazy(() => import('@/app/(other)/coming-soon/page'));
+// const Maintenance = lazy(() => import('@/app/(other)/maintenance/page'));
+// const ComingSoon = lazy(() => import('@/app/(other)/coming-soon/page'));
 
 // Auth Routes
 const AuthSignIn2 = lazy(() => import('@/app/(other)/auth/sign-in-2/page'));
-const AuthSignUp2 = lazy(() => import('@/app/(other)/auth/sign-up-2/page'));
+// const AuthSignUp2 = lazy(() => import('@/app/(other)/auth/sign-up-2/page'));
 
 // Apps Routes
 // const EcommerceProducts = lazy(() => import('@/app/(admin)/ecommerce/products/page'))
@@ -32,24 +32,16 @@ const generalRoutes = [{
   name: 'Analytics',
   element: <Analytics />
 }];
-const appsRoutes = [];
-const customRoutes = [];
-const baseUIRoutes = [];
-const tableRoutes = [];
-const iconRoutes = [];
-const advancedUIRoutes = [];
+// const appsRoutes = [];
+// const customRoutes = [];
+// const baseUIRoutes = [];
+// const tableRoutes = [];
+// const iconRoutes = [];
+// const advancedUIRoutes = [];
 export const authRoutes = [{
   name: 'Sign In',
   path: '/auth/sign-in',
   element: <AuthSignIn2 />
-}, {
-  name: 'Maintenance',
-  path: '/maintenance',
-  element: <Maintenance />
-}, {
-  name: 'Coming Soon',
-  path: '/coming-soon',
-  element: <ComingSoon />
 }];
 // export const appRoutes = [...initialRoutes, ...generalRoutes, ...appsRoutes, ...customRoutes, ...baseUIRoutes, ...advancedUIRoutes, ...tableRoutes, ...iconRoutes, ...authRoutes];
 export const appRoutes = [...initialRoutes, ...generalRoutes,  ...authRoutes];

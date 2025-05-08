@@ -20,7 +20,7 @@ const LayoutProvider = ({
     theme: params.layout_theme ? params.layout_theme : getPreferredTheme(),
     topbarTheme: params.topbar_theme ? params.topbar_theme : 'light',
     menu: {
-      theme: params.menu_theme ? params.menu_theme : 'dark',
+      theme: params.menu_theme ? params.menu_theme : 'light',
       size: params.menu_size ? params.menu_size : 'sm-hover-active'
     }
   };

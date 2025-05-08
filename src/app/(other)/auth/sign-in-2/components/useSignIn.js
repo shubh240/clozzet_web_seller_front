@@ -98,7 +98,7 @@ const login = handleSubmit(async (values) => {
   setLoading(true);
   try {
     // Define the base URL
-    const baseUrl = 'https://server.clozzetindia.in:3001/api/v1/';
+    const baseUrl =  import.meta.env.VITE_API_URL_SELLER;
 
     // Perform the login request using axios
     const res = await axios.post(

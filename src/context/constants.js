@@ -1,9 +1,9 @@
 export const currency = 'Rs.';
 export const currentYear = new Date().getFullYear();
-export const developedByLink = 'https://techzaa.getappui.com/';
-export const developedBy = 'Techzaa';
-export const contactUs = 'techzaastudio@gmail.com';
+export const developedByLink = 'https://www.linkedin.com/in/jateen-koshti-thedev/';
+export const developedBy = 'Jateen Koshti';
+export const contactUs = 'koshtijatin26@gmail.com';
 export const buyLink = '';
 export const basePath = '/seller';
-export const DEFAULT_PAGE_TITLE = 'Rasket React | Responsive Admin Dashboard Template';
+export const DEFAULT_PAGE_TITLE = 'Clozzet';
 export const colorVariants = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark', 'light', 'link'];
