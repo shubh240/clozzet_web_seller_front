@@ -17,7 +17,8 @@ const LayoutProvider = ({
   const params = useQueryParams();
   const override = !!(params.layout_theme || params.topbar_theme || params.menu_theme || params.menu_size);
   const INIT_STATE = {
-    theme: params.layout_theme ? params.layout_theme : getPreferredTheme(),
+    // theme: params.layout_theme ? params.layout_theme : getPreferredTheme(),
+    theme: params.layout_theme ? params.layout_theme : 'light',
     topbarTheme: params.topbar_theme ? params.topbar_theme : 'light',
     menu: {
       theme: params.menu_theme ? params.menu_theme : 'light',

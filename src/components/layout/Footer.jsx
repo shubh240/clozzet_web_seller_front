@@ -1,6 +1,7 @@
 import { currentYear, developedBy, developedByLink } from '@/context/constants';
 import IconifyIcon from '../wrappers/IconifyIcon';
 import { Col, Container, Row } from 'react-bootstrap';
+import { DEFAULT_PAGE_TITLE } from '../../context/constants';
 const Footer = () => {
   return <footer className="footer">
       <Container fluid>
@@ -8,8 +9,8 @@ const Footer = () => {
           <Col xs={12} className="text-center">
             <span className="icons-center">
               {' '}
-              {currentYear} © Rasket. Crafted by&nbsp;
-              <IconifyIcon icon="solar:hearts-bold-duotone" className="fs-18 align-middle text-danger" />
+              {currentYear} © {DEFAULT_PAGE_TITLE}. Crafted by&nbsp;
+              {/* <IconifyIcon icon="solar:hearts-bold-duotone" className="fs-18 align-middle text-danger" /> */}
               &nbsp;
               <a href={developedByLink} className="fw-bold footer-text" target="_blank">
                 {developedBy}

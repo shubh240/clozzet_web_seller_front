@@ -23,7 +23,7 @@ const StatCard = ({
           </Col>
         </Row>
       </CardBody>
-      <CardFooter className="border-0 py-2 bg-light bg-opacity-50">
+      {/* <CardFooter className="border-0 py-2 bg-light bg-opacity-50">
         <div className="d-flex align-items-center justify-content-between ">
           <div>
             <span className={`text-${variant} icons-center`}>
@@ -37,7 +37,7 @@ const StatCard = ({
             View More
           </Link>
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>;
 };
 const Stats = () => {

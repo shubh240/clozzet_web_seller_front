@@ -85,25 +85,25 @@ export const pagesList = [{
   variant: 'success'
 }];
 export const statData = [{
-  title: 'Page View',
+  title: 'Total Orders',
   icon: 'solar:leaf-bold-duotone',
   stat: '13, 647',
   change: '2.3%',
   variant: 'success'
 }, {
-  title: 'Clicks',
+  title: 'Total Customers',
   icon: 'solar:cpu-bolt-line-duotone',
   stat: '9, 526',
   change: '8.1%',
   variant: 'success'
 }, {
-  title: 'Conversions',
+  title: 'Total Products',
   icon: 'solar:layers-bold-duotone',
   stat: '976',
   change: '0.3%',
   variant: 'danger'
 }, {
-  title: 'New Users',
+  title: 'Total Sell',
   icon: 'solar:users-group-two-rounded-bold-duotone',
   stat: `${currency}123.6k`,
   change: '10.6%',

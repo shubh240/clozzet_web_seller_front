@@ -4,12 +4,15 @@ import Conversions from './components/Conversions';
 import SessionByBrowser from './components/SessionByBrowser';
 import Stats from './components/Stats';
 import TopPages from './components/TopPages';
+import { useAuthContext } from '../../../../context/useAuthContext';
 export default function Home() {
+  const { user } = useAuthContext();
+
   return <>
       <PageMetaData title="Dashboard" />
 
       <Stats />
-      <Row>
+      {/* <Row>
         <Col>
           <Conversions />
         </Col>
@@ -21,6 +24,6 @@ export default function Home() {
         <Col lg={6}>
           <TopPages />
         </Col>
-      </Row>
+      </Row> */}
     </>;
 }

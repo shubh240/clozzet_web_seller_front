@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 // Dashboard Routes
 const Analytics = lazy(() => import('@/app/(admin)/dashboard/analytics/page'));
+const Categories = lazy(() => import('@/app/(admin)/categories/page'));
 // const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
 // const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
 
@@ -25,12 +26,17 @@ const AuthSignIn2 = lazy(() => import('@/app/(other)/auth/sign-in-2/page'));
 const initialRoutes = [{
   path: '/',
   name: 'root',
-  element: <Navigate to="/dashboard/analytics" />
+  element: <Navigate to="/dashboard" />
 }];
 const generalRoutes = [{
-  path: '/dashboard/analytics',
+  path: '/dashboard',
   name: 'Analytics',
   element: <Analytics />
+},
+{
+  path: '/categories',
+  name: 'Categories',
+  element: <Categories />
 }];
 // const appsRoutes = [];
 // const customRoutes = [];
