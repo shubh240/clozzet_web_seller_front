@@ -204,7 +204,7 @@ export default function Home() {
                       <button
                         className="rounded-pill btn btn-sm btn-outline-primary me-2"
                         onClick={() => navigate(`/categories/${categoryId}/${id}`)}>
-                        Sub category
+                        Sub Category
                       </button>
                       <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
                         Delete
