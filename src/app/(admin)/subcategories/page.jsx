@@ -9,44 +9,45 @@ import ComponentContainerCard from '@/components/ComponentContainerCard'
 // import { Grid } from 'gridjs-react'
 import { Grid, _ } from 'gridjs-react'
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 export default function Home() {
-  const navigate = useNavigate()
+  
+  const { categoryId, id } = useParams();
 
   const { user } = useAuthContext()
   const { showNotification } = useNotificationContext()
 
   const didFetch = useRef(false)
 
-  const [categories, setCategories] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [subcategories, setSubCategories] = useState([])
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null)
 
-  const [sellerCategories, setSellerCategories] = useState([])
+  const [sellerSubCategories, setSellerCategories] = useState([])
 
   const fetchCategories = async () => {
     try {
       axios
-        .get(`${API_URL_ADMIN}category/list-category`)
+        .get(`${API_URL_ADMIN}subCategory/list-sub-category?category=${categoryId}`)
         .then((res) => {
           const options = res.data.data.map((cat) => ({
             value: cat._id,
             label: cat.name,
           }))
-          setCategories(options)
+          setSubCategories(options)
         })
         .catch((err) => {
-          console.error('Failed to fetch categories', err)
+          console.error('Failed to fetch subcategories', err)
           showNotification({
             title: 'Error',
-            message: 'Failed to fetch categories',
+            message: 'Failed to fetch subcategories',
             variant: 'danger',
           })
         })
     } catch (err) {
       showNotification({
         title: 'Error',
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to fetch seller subcategories',
         variant: 'danger',
       })
     }
@@ -54,7 +55,7 @@ export default function Home() {
 
   const fetchSellerCategories = async () => {
     try {
-      const res = await axios.get(`${API_URL_SELLER}category/list-category`, {
+      const res = await axios.get(`${API_URL_SELLER}subCategory/list-subCategory?sellerId=${user?._id}&sellerCategoryId=${id}`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -63,13 +64,13 @@ export default function Home() {
     } catch (err) {
       showNotification({
         title: 'Error',
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to fetch seller subcategories',
         variant: 'danger',
       })
     }
   }
 
-  // Fetch categories
+  // Fetch subcategories
   useEffect(() => {
     if (didFetch.current) return
     fetchCategories()
@@ -82,7 +83,7 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!selectedCategory) {
+    if (!selectedSubCategory) {
       showNotification({
         // title: 'Validation',
         message: 'Please select a category',
@@ -94,11 +95,13 @@ export default function Home() {
     try {
       const payload = {
         sellerId: user?._id,
-        categoryId: selectedCategory.value,
+        categoryId: categoryId,
+        sellerCategoryId: id,
+        subCategoryId: selectedSubCategory?.value,
       }
 
       const response = await axios.post(
-        `${API_URL_SELLER}category/add-category`,
+        `${API_URL_SELLER}subCategory/add-subCategory`,
         payload,
 
         {
@@ -122,7 +125,7 @@ export default function Home() {
 
       fetchSellerCategories()
 
-      setSelectedCategory(null)
+      setSelectedSubCategory(null)
     } catch (error) {
       console.error('Error adding category:', error?.response?.data?.message)
       showNotification({
@@ -135,23 +138,23 @@ export default function Home() {
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: 'Are you sure?',
-      text: 'This category will be permanently deleted.',
+      text: 'This sub category will be permanently deleted.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, delete it!',
     })
-
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${API_URL_SELLER}category/delete-category/${id}`, {
+        await axios.delete(`${API_URL_SELLER}subCategory/delete-subCategory/${id}`, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
         })
+
         showNotification({
-          message: 'The category has been deleted.',
+          message: 'The sub category has been deleted.',
           variant: 'success',
         })
         fetchSellerCategories()
@@ -166,50 +169,40 @@ export default function Home() {
 
   return (
     <>
-      <PageMetaData title="Category" />
-      <ComponentContainerCard id="category" title="Category List">
-        <div style={{ maxWidth: '400px' }} className="mt-2">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="category" className="form-label">
-                Select Category
-              </label>
-              <Select id="category" options={categories} value={selectedCategory} onChange={setSelectedCategory} placeholder="Choose a category..." />
-            </div>
+      <PageMetaData title="Sub Category" />
+      <ComponentContainerCard id="category" title="Sub Category List">
+        <div style={{ maxWidth: '400px' }} className='mt-2'>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="category" className="form-label">
+              Select Sub Category
+            </label>
+            <Select id="category" options={subcategories} value={selectedSubCategory} onChange={setSelectedSubCategory} placeholder="Choose a category..." />
+          </div>
 
-            <button type="submit" className="btn btn-primary">
-              Add
-            </button>
-          </form>
+          <button type="submit" className="btn btn-primary">
+            Add
+          </button>
+        </form>
         </div>
       </ComponentContainerCard>
-      <ComponentContainerCard id="category" title="Category List">
-        {sellerCategories.length === 0 ? (
-          <p className="text-muted">No categories assigned yet.</p>
+      <ComponentContainerCard id="category" title="Sub Category List">
+        {sellerSubCategories.length === 0 ? (
+          <p className="text-muted">No subcategories assigned yet.</p>
         ) : (
           <Grid
-            data={sellerCategories.map((item, index) => [index + 1, item?.category?.name || 'N/A', item._id])}
+            data={sellerSubCategories.map((item, index) => [index + 1, item?.subCategory?.name || 'N/A', item._id])}
             columns={[
               'No',
-              'Category',
+              'Sub Category',
               {
                 name: 'Action',
-                formatter: (cell, row) => {
+                formatter: (cell, row) => {// _id is the 3rd item in the row
                   const id = row.cells[2].data
-                  const category = sellerCategories.find((sc) => sc._id === id)
-                  const categoryId = category?.categoryId
                   return _(
-                    <>
-                      {/* <button className="rounded-pill btn btn-sm btn-outline-primary me-2" onClick={() => navigate(`/categories/${id}`)}> */}
-                      <button
-                        className="rounded-pill btn btn-sm btn-outline-primary me-2"
-                        onClick={() => navigate(`/categories/${categoryId}/${id}`)}>
-                        Sub category
-                      </button>
-                      <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
-                        Delete
-                      </button>
-                    </>,
+                    <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
+                      Delete
+                    </button>,
                   )
                 },
               },
