@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom';
 const Analytics = lazy(() => import('@/app/(admin)/dashboard/analytics/page'));
 const Categories = lazy(() => import('@/app/(admin)/categories/page'));
 const SubCategories = lazy(() => import('@/app/(admin)/subcategories/page'));
+const SizeCharts = lazy(() => import('@/app/(admin)/sizechart/page'));
 // const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
 // const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
 
@@ -43,7 +44,13 @@ const generalRoutes = [{
   path: '/categories/:categoryId/:id',
   name: 'Sub Categories',
   element: <SubCategories />
-}];
+},
+{
+  path: '/sizeCharts',
+  name: 'SizeCharts',
+  element: <SizeCharts />
+},
+];
 // const appsRoutes = [];
 // const customRoutes = [];
 // const baseUIRoutes = [];
