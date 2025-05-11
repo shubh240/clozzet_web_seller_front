@@ -18,6 +18,13 @@ export const MENU_ITEMS = [
     url: '/categories',
   },
   {
+    key: 'sizeChart',
+    icon: 'solar:layers-outline',
+
+    label: 'SizeChart',
+    url: '/sizeCharts',
+  },
+  {
     key: 'menuitem',
     icon: 'solar:share-broken',
     label: 'Menu Item',
