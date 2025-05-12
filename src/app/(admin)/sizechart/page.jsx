@@ -29,10 +29,9 @@ export default function Home() {
           Authorization: `Bearer ${user?.token}`,
         },
       })
-      setSizeCharts(res.data?.data?.data || [])
+      setSizeCharts(res.data?.data || [])
     } catch (err) {
       showNotification({
-        title: 'Error',
         message: 'Failed to fetch size charts',
         variant: 'danger',
       })
@@ -135,17 +134,6 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.target.classList.contains('btn-delete')) {
-        const id = e.target.dataset.id
-        handleDelete(id)
-      }
-    }
-    document.addEventListener('click', handler)
-    return () => document.removeEventListener('click', handler)
-  }, [])
-
   return (
     <>
       <PageMetaData title="Size Chart" />
@@ -220,19 +208,14 @@ export default function Home() {
                   _(<img src={cell} alt="size chart" width="60" style={{ borderRadius: '4px' }} />),
               },
               {
-                name: 'ID',
-                formatter: (cell) => cell.slice(0, 8) + '...',
-              },
-              {
                 name: 'Action',
                 formatter: (cell, row) => {
                   const id = row.cells[3].data
                   const name = row.cells[1].data
-                  const image = row.cells[2].data
                   return _(
                     <>
                       <button
-                        className="btn btn-sm btn-outline-primary me-2"
+                        className="rounded-pill btn btn-sm btn-outline-primary me-2"
                         onClick={() => {
                           setEditingId(id)
                           setName(name)
@@ -243,8 +226,8 @@ export default function Home() {
                         Edit
                       </button>
                       <button
-                        className="btn btn-sm btn-outline-danger btn-delete"
-                        data-id={id}
+                        className="rounded-pill btn btn-sm btn-outline-danger"
+                        onClick={() => handleDelete(id)}
                       >
                         Delete
                       </button>

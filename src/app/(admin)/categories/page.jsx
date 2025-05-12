@@ -38,14 +38,12 @@ export default function Home() {
         .catch((err) => {
           console.error('Failed to fetch categories', err)
           showNotification({
-            title: 'Error',
             message: 'Failed to fetch categories',
             variant: 'danger',
           })
         })
     } catch (err) {
       showNotification({
-        title: 'Error',
         message: 'Failed to fetch seller categories',
         variant: 'danger',
       })
@@ -62,7 +60,6 @@ export default function Home() {
       setSellerCategories(res.data.data)
     } catch (err) {
       showNotification({
-        title: 'Error',
         message: 'Failed to fetch seller categories',
         variant: 'danger',
       })

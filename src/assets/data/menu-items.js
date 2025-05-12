@@ -19,10 +19,17 @@ export const MENU_ITEMS = [
   },
   {
     key: 'sizeChart',
-    icon: 'solar:layers-outline',
+    icon: 'solar:ruler-outline',
 
-    label: 'SizeChart',
+    label: 'Size Chart',
     url: '/sizeCharts',
+  },
+  {
+    key: 'products-list',
+    icon: 'solar:box-outline',
+
+    label: 'Products',
+    url: '/products-list',
   },
   {
     key: 'menuitem',

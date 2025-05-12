@@ -10,7 +10,7 @@ const ComponentContainerCard = ({
 }) => {
   return <Card>
       <CardBody>
-        <CardTitle as={'h5'} className={clsx('anchor mb-1', titleClass)} id={id}>
+        <CardTitle as={'h3'} className={clsx('anchor mb-1', titleClass)} id={id}>
           {title}
           <a className="anchor-link" href={`#${id}`}>
             #
