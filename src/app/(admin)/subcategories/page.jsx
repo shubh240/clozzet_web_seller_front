@@ -197,6 +197,7 @@ export default function Home() {
               'Sub Category',
               {
                 name: 'Action',
+                sort: false,
                 formatter: (cell, row) => {// _id is the 3rd item in the row
                   const id = row.cells[2].data
                   return _(

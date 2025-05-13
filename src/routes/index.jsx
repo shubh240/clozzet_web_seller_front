@@ -10,6 +10,7 @@ const SizeCharts = lazy(() => import('@/app/(admin)/sizechart/page'));
 // Products
 const ProductsLists= lazy(() => import('@/app/(admin)/products/list'));
 const ProductsAdd= lazy(() => import('@/app/(admin)/products/add'));
+const ProductsEdit= lazy(() => import('@/app/(admin)/products/edit'));
 
 // const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
 // const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
@@ -42,7 +43,7 @@ const initialRoutes = [{
   name: 'root',
   element: <Navigate to="/dashboard" />
 }];
-const generalRoutes = [{
+const sellerRoutes = [{
   path: '/dashboard',
   name: 'Analytics',
   element: <Analytics />
@@ -69,8 +70,13 @@ const generalRoutes = [{
 },
 {
   path: '/products-add',
-  name: 'Products',
+  name: 'Product Add',
   element: <ProductsAdd />
+},
+{
+  path: '/products-edit/:id',
+  name: 'Product Edit',
+  element: <ProductsEdit />
 },
 ];
 
@@ -82,4 +88,4 @@ const generalRoutes = [{
 // const iconRoutes = [];
 // const advancedUIRoutes = [];
 // export const appRoutes = [...initialRoutes, ...generalRoutes, ...appsRoutes, ...customRoutes, ...baseUIRoutes, ...advancedUIRoutes, ...tableRoutes, ...iconRoutes, ...authRoutes];
-export const appRoutes = [...initialRoutes, ...generalRoutes,  ...authRoutes];
+export const appRoutes = [...initialRoutes, ...sellerRoutes,  ...authRoutes];

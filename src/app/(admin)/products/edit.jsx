@@ -4,13 +4,15 @@ import PageMetaData from '@/components/PageTitle'
 import { API_URL_ADMIN, API_URL_SELLER } from '../../../context/constants'
 import { useAuthContext } from '../../../context/useAuthContext'
 import { useNotificationContext } from '@/context/useNotificationContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Card, CardBody } from 'react-bootstrap'
 import Select from 'react-select'
 import { useDropzone } from 'react-dropzone'
 import Spinner from '@/components/Spinner'
 
 export default function Home() {
+  const { id } = useParams()
+
   const navigate = useNavigate()
 
   const { user } = useAuthContext()
@@ -19,6 +21,8 @@ export default function Home() {
 
   const didFetch = useRef(false)
 
+  const [productData, setProductData] = useState(null)
+
   const [categoryList, setCategoryList] = useState([])
   const [subCategoryList, setSubCategoryList] = useState([])
   const [sizeChartList, setSizeChartList] = useState([])
@@ -26,6 +30,7 @@ export default function Home() {
   const fetchCategory = async () => {
     try {
       setLoading(true)
+
       axios
         .get(`${API_URL_ADMIN}category/list-category`)
         .then((res) => {
@@ -41,9 +46,9 @@ export default function Home() {
           setSubCategoryList([])
         })
         .catch((err) => {
-          console.error('Failed to fetch categories', err)
           setLoading(false)
 
+          console.error('Failed to fetch categories', err)
           showNotification({
             message: 'Failed to fetch categories',
             variant: 'danger',
@@ -71,6 +76,11 @@ export default function Home() {
       setLoading(false)
 
       setSubCategoryList(res.data.data || [])
+
+      setFormData((prev) => ({
+        ...prev,
+        subcategory: productData.subcategory?._id || '',
+      }))
     } catch (err) {
       setLoading(false)
 
@@ -96,6 +106,29 @@ export default function Home() {
       setLoading(false)
 
       setSizeChartList(res.data.data || [])
+
+    } catch (err) {
+      setLoading(false)
+
+      showNotification({
+        message: 'Failed to fetch seller categories',
+        variant: 'danger',
+      })
+    }
+  }
+
+  const fetchData = async () => {
+    try {
+      setLoading(true)
+
+      const res = await axios.get(`${API_URL_SELLER}products/list-productById/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      setLoading(false)
+
+      setProductData(res.data.data || [])
     } catch (err) {
       setLoading(false)
 
@@ -112,6 +145,7 @@ export default function Home() {
     setLoading(true)
     fetchCategory()
     fetchSizeChart()
+    fetchData()
     didFetch.current = true
     setLoading(false)
   }, [])
@@ -134,6 +168,43 @@ export default function Home() {
   })
 
   const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' }])
+
+  useEffect(() => {
+    if (productData) {
+      setFormData({
+        name: productData.name || '',
+        sku: productData.sku || '',
+        description: productData.description || '',
+        category: {
+          value: productData.category?._id,
+          label: productData.category?.name,
+        },
+        subcategory: productData.subcategory?._id,
+        sellingPrice: productData.sellingPrice || '',
+        originalPrice: productData.originalPrice || '',
+        sizeChartId: productData.sizeChartId || null,
+        brandName: productData.brandName || '',
+        primaryImage: null, // Keep null unless you allow re-upload
+        images: [],
+      })
+
+      console.log(productData?.brandName)
+
+      fetchSubCategory(productData.sizeChartId)
+
+      // Set preview for primaryImage if needed
+      // setPrimaryImage(productData.primaryImage)
+
+      // If you want to preview image URLs (not files), store those separately
+      // For uploads only, keep formData.images as [] initially
+    }
+  }, [productData])
+
+  // useEffect(() => {
+  //   if (productData?.category?._id) {
+  //     fetchSubCategory(productData.category._id)
+  //   }
+  // }, [productData])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -297,7 +368,7 @@ export default function Home() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-3">
-            <h3 className="mb-0">Product Add</h3>
+            <h3 className="mb-0">Product Edit</h3>
           </div>
           <form onSubmit={handleSubmit}>
             {/* Product Details */}
@@ -353,7 +424,7 @@ export default function Home() {
                 <Select
                   id="Subcategory"
                   options={subCategoryList}
-                  value={subCategoryList.find((opt) => opt._id === formData.subcategory) || null}
+                  value={subCategoryList.find((opt) => opt._id == formData.subcategory?.toString()) || null}
                   onChange={(selectedOption) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -370,7 +441,7 @@ export default function Home() {
                 <input
                   type="text"
                   name="brandName"
-                  value={formData.sbrandNameu}
+                  value={formData.brandName}
                   onChange={handleChange}
                   className="form-control"
                   placeholder="Enter brand name"
@@ -406,7 +477,7 @@ export default function Home() {
                 <Select
                   id="sizechart"
                   options={sizeChartList}
-                  value={(sizeChartList?.length > 0 && sizeChartList.find((opt) => opt._id === formData.sizeChartId)) || null}
+                  value={(sizeChartList?.length > 0 && sizeChartList.find((opt) => opt._id?.toString() === formData.sizeChartId?.toString())) || null}
                   onChange={(selectedOption) =>
                     setFormData((prev) => ({
                       ...prev,

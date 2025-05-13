@@ -191,6 +191,7 @@ export default function Home() {
               'Category',
               {
                 name: 'Action',
+                sort: false,
                 formatter: (cell, row) => {
                   const id = row.cells[2].data
                   const category = sellerCategories.find((sc) => sc._id === id)

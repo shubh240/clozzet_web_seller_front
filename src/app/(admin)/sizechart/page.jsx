@@ -204,11 +204,13 @@ export default function Home() {
               'Name',
               {
                 name: 'Image',
+                sort: false,
                 formatter: (cell) =>
                   _(<img src={cell} alt="size chart" width="60" style={{ borderRadius: '4px' }} />),
               },
               {
                 name: 'Action',
+                sort: false,
                 formatter: (cell, row) => {
                   const id = row.cells[3].data
                   const name = row.cells[1].data
