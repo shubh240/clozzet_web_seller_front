@@ -127,7 +127,7 @@ export default function Home() {
     subcategory: null,
     sellingPrice: '',
     originalPrice: '',
-    sizeChartId: null,
+    sizeChart: null,
     brandName: '',
     primaryImage: null,
     images: [],
@@ -227,7 +227,7 @@ export default function Home() {
       form.append('subcategory', formData.subcategory)
       form.append('sellingPrice', formData.sellingPrice)
       form.append('originalPrice', formData.originalPrice)
-      form.append('sizeChartId', formData.sizeChartId)
+      form.append('sizeChart', formData.sizeChart)
       form.append('brandName', formData.brandName)
 
       if (formData.primaryImage) {
@@ -406,11 +406,11 @@ export default function Home() {
                 <Select
                   id="sizechart"
                   options={sizeChartList}
-                  value={(sizeChartList?.length > 0 && sizeChartList.find((opt) => opt._id === formData.sizeChartId)) || null}
+                  value={(sizeChartList?.length > 0 && sizeChartList.find((opt) => opt._id === formData.sizeChart)) || null}
                   onChange={(selectedOption) =>
                     setFormData((prev) => ({
                       ...prev,
-                      sizeChartId: selectedOption?._id || '',
+                      sizeChart: selectedOption?._id || '',
                     }))
                   }
                   getOptionValue={(option) => option._id}

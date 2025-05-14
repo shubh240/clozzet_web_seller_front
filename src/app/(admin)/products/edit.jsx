@@ -106,7 +106,6 @@ export default function Home() {
       setLoading(false)
 
       setSizeChartList(res.data.data || [])
-
     } catch (err) {
       setLoading(false)
 
@@ -161,7 +160,7 @@ export default function Home() {
     subcategory: null,
     sellingPrice: '',
     originalPrice: '',
-    sizeChartId: null,
+    sizeChart: null,
     brandName: '',
     primaryImage: null,
     images: [],
@@ -182,29 +181,15 @@ export default function Home() {
         subcategory: productData.subcategory?._id,
         sellingPrice: productData.sellingPrice || '',
         originalPrice: productData.originalPrice || '',
-        sizeChartId: productData.sizeChartId || null,
+        sizeChart: productData.sizeChart?._id || null,
         brandName: productData.brandName || '',
         primaryImage: null, // Keep null unless you allow re-upload
         images: [],
       })
 
-      console.log(productData?.brandName)
-
-      fetchSubCategory(productData.sizeChartId)
-
-      // Set preview for primaryImage if needed
-      // setPrimaryImage(productData.primaryImage)
-
-      // If you want to preview image URLs (not files), store those separately
-      // For uploads only, keep formData.images as [] initially
+      fetchSubCategory(productData.category._id)
     }
   }, [productData])
-
-  // useEffect(() => {
-  //   if (productData?.category?._id) {
-  //     fetchSubCategory(productData.category._id)
-  //   }
-  // }, [productData])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -213,7 +198,7 @@ export default function Home() {
       [name]: value,
     }))
   }
-  // Handle primary image (only 1)
+
   const onDropPrimary = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0]
@@ -225,7 +210,6 @@ export default function Home() {
     }
   }, [])
 
-  // Handle multiple images (up to 5)
   const onDropMultiple = useCallback(
     (acceptedFiles) => {
       if (images.length + acceptedFiles.length > 5) {
@@ -279,12 +263,12 @@ export default function Home() {
       })
     }
 
-    if (sizeQuantityList.length === 0 || sizeQuantityList.some((item) => !item.size || !item.quantity)) {
-      return showNotification({
-        message: 'Please enter at least one valid size and quantity',
-        variant: 'warning',
-      })
-    }
+    // if (sizeQuantityList.length === 0 || sizeQuantityList.some((item) => !item.size || !item.quantity)) {
+    //   return showNotification({
+    //     message: 'Please enter at least one valid size and quantity',
+    //     variant: 'warning',
+    //   })
+    // }
 
     try {
       setLoading(true)
@@ -298,7 +282,7 @@ export default function Home() {
       form.append('subcategory', formData.subcategory)
       form.append('sellingPrice', formData.sellingPrice)
       form.append('originalPrice', formData.originalPrice)
-      form.append('sizeChartId', formData.sizeChartId)
+      form.append('sizeChart', formData.sizeChart)
       form.append('brandName', formData.brandName)
 
       if (formData.primaryImage) {
@@ -309,7 +293,7 @@ export default function Home() {
         form.append('images', image)
       })
 
-      const res = await axios.post(`${API_URL_SELLER}products/add-product`, form, {
+      const res = await axios.put(`${API_URL_SELLER}products/update-product/${id}`, form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${user?.token}`,
@@ -317,31 +301,31 @@ export default function Home() {
       })
 
       showNotification({
-        message: 'Product added successfully!',
+        message: 'Product updated successfully!',
         variant: 'success',
       })
 
-      if (res?.data?.success === true) {
-        const productId = res?.data?.data?._id
+      // if (res?.data?.success === true) {
+      //   const productId = res?.data?.data?._id
 
-        for (const item of sizeQuantityList) {
-          if (item.size && item.quantity) {
-            await axios.post(
-              `${API_URL_SELLER}productSize/create-productSize`,
-              {
-                productId,
-                size: item.size,
-                quantity: item.quantity,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${user?.token}`,
-                },
-              },
-            )
-          }
-        }
-      }
+      //   for (const item of sizeQuantityList) {
+      //     if (item.size && item.quantity) {
+      //       await axios.post(
+      //         `${API_URL_SELLER}productSize/create-productSize`,
+      //         {
+      //           productId,
+      //           size: item.size,
+      //           quantity: item.quantity,
+      //         },
+      //         {
+      //           headers: {
+      //             Authorization: `Bearer ${user?.token}`,
+      //           },
+      //         },
+      //       )
+      //     }
+      //   }
+      // }
 
       setLoading(false)
 
@@ -477,11 +461,11 @@ export default function Home() {
                 <Select
                   id="sizechart"
                   options={sizeChartList}
-                  value={(sizeChartList?.length > 0 && sizeChartList.find((opt) => opt._id?.toString() === formData.sizeChartId?.toString())) || null}
+                  value={(sizeChartList?.length > 0 && sizeChartList.find((opt) => opt._id?.toString() === formData.sizeChart?.toString())) || null}
                   onChange={(selectedOption) =>
                     setFormData((prev) => ({
                       ...prev,
-                      sizeChartId: selectedOption?._id || '',
+                      sizeChart: selectedOption?._id || '',
                     }))
                   }
                   getOptionValue={(option) => option._id}
@@ -501,7 +485,7 @@ export default function Home() {
                 {primaryImage ? (
                   <img src={URL.createObjectURL(primaryImage)} alt="Primary" height={100} />
                 ) : (
-                  <p>Drag 'n' drop or click to select a primary image</p>
+                  <img src={productData?.primaryImage} alt="Primary" height={100} />
                 )}
               </div>
             </div>
@@ -516,7 +500,7 @@ export default function Home() {
                 <p>Drag 'n' drop or click to select up to 5 images</p>
               </div>
 
-              {images.length > 0 && (
+              {images.length > 0 ? (
                 <div className="mt-3 d-flex flex-wrap gap-2">
                   {images.map((file, idx) => (
                     <div key={idx} className="position-relative">
@@ -529,9 +513,36 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div className="mt-3 d-flex flex-wrap gap-2">
+                  {productData?.images?.map((image, idx) => (
+                    <div key={idx} className="position-relative">
+                      <img src={image?.imageUrl} alt={`img-${idx}`} height={80} style={{ borderRadius: 8 }} />
+                      {/* <button
+                        type="button"
+                        className="btn-close position-absolute top-0 end-0"
+                        aria-label="Remove"
+                        onClick={() => removeImage(idx)}></button> */}
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
 
+            {/* Submit Button */}
+            <button type="submit" className="btn btn-success">
+              Submit Product
+            </button>
+          </form>
+        </CardBody>
+      </Card>
+
+      {/* <Card>
+        <CardBody>
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <h3 className="mb-0">Product Size & Quantity</h3>
+          </div>
+          <form>
             <div className="mb-4">
               <label className="form-label">Size & Quantity</label>
               {sizeQuantityList.map((item, index) => (
@@ -582,14 +593,12 @@ export default function Home() {
                 + Add Size
               </button>
             </div>
-
-            {/* Submit Button */}
             <button type="submit" className="btn btn-success">
               Submit Product
             </button>
           </form>
         </CardBody>
-      </Card>
+      </Card> */}
     </>
   )
 }
