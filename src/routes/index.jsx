@@ -12,6 +12,10 @@ const ProductsLists= lazy(() => import('@/app/(admin)/products/list'));
 const ProductsAdd= lazy(() => import('@/app/(admin)/products/add'));
 const ProductsEdit= lazy(() => import('@/app/(admin)/products/edit'));
 
+const InventoryList = lazy(() => import('@/app/(admin)/products/inventory/list'));
+const InventoryAdd = lazy(() => import('@/app/(admin)/products/inventory/add'));
+const InventoryEdit = lazy(() => import('@/app/(admin)/products/inventory/edit'));
+
 // const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
 // const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
 
@@ -77,6 +81,21 @@ const sellerRoutes = [{
   path: '/products-edit/:id',
   name: 'Product Edit',
   element: <ProductsEdit />
+},
+{
+  path: '/products-inventory-list/:productId',
+  name: 'Products',
+  element: <InventoryList />
+},
+{
+  path: '/products-inventory-add/:productId',
+  name: 'Product Add',
+  element: <InventoryAdd />
+},
+{
+  path: '/products-inventory-edit/:productId/:id',
+  name: 'Product Edit',
+  element: <InventoryEdit />
 },
 ];
 
