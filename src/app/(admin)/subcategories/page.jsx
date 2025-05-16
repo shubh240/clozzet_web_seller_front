@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import {useCallback, useEffect, useRef, useState } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
 import PageMetaData from '@/components/PageTitle'
@@ -10,6 +10,7 @@ import ComponentContainerCard from '@/components/ComponentContainerCard'
 import { Grid, _ } from 'gridjs-react'
 import Swal from 'sweetalert2'
 import { useParams } from 'react-router-dom'
+import { useDropzone } from 'react-dropzone'
 
 export default function Home() {
   
@@ -93,17 +94,17 @@ export default function Home() {
     }
 
     try {
-      const payload = {
-        sellerId: user?._id,
-        categoryId: categoryId,
-        sellerCategoryId: id,
-        subCategoryId: selectedSubCategory?.value,
-      }
-
+          const formData = new FormData();
+          formData.append('sellerId', user?._id);
+          formData.append('categoryId', categoryId);
+          formData.append('sellerCategoryId', id);
+          formData.append('subCategoryId', selectedSubCategory?.value);
+        if (primaryImage) {
+            formData.append('image', primaryImage);
+          }
       const response = await axios.post(
         `${API_URL_SELLER}subCategory/add-subCategory`,
-        payload,
-
+        formData,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -126,6 +127,7 @@ export default function Home() {
       fetchSellerCategories()
 
       setSelectedSubCategory(null)
+      setPrimaryImage(null);
     } catch (error) {
       console.error('Error adding category:', error?.response?.data?.message)
       showNotification({
@@ -166,6 +168,19 @@ export default function Home() {
       }
     }
   }
+    const [primaryImage, setPrimaryImage] = useState(null)
+    // Handle primary image (only 1)
+    const onDropPrimary = useCallback((acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0]
+        setPrimaryImage(file)
+      }
+    }, [])
+    const { getRootProps: getRootPropsPrimary, getInputProps: getInputPropsPrimary } = useDropzone({
+      onDrop: onDropPrimary,
+      maxFiles: 1,
+      accept: { 'image/*': [] },
+    })
 
   return (
     <>
@@ -179,7 +194,20 @@ export default function Home() {
             </label>
             <Select id="category" options={subcategories} value={selectedSubCategory} onChange={setSelectedSubCategory} placeholder="Choose a category..." />
           </div>
-
+           <div className="mb-4">
+              <label className="form-label">SubCategory Image</label>
+              <div
+                {...getRootPropsPrimary()}
+                className="dropzone border p-4 bg-light text-center"
+                style={{ cursor: 'pointer', borderStyle: 'dashed' }}>
+                <input {...getInputPropsPrimary()} />
+                {primaryImage ? (
+                  <img src={URL.createObjectURL(primaryImage)} alt="Primary" height={100} />
+                ) : (
+                  <p>Drag 'n' drop or click to select a primary image</p>
+                )}
+              </div>
+            </div>
           <button type="submit" className="btn btn-primary">
             Add
           </button>
