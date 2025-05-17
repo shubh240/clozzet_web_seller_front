@@ -25,6 +25,10 @@ export default function Home() {
   const [selectedSubCategory, setSelectedSubCategory] = useState(null)
 
   const [sellerSubCategories, setSellerCategories] = useState([])
+  const [editMode, setEditMode] = useState(false)
+  const [editId, setEditId] = useState(null)
+  const [primaryImagePreview, setPrimaryImagePreview] = useState(null);
+
 
   const fetchCategories = async () => {
     try {
@@ -102,21 +106,38 @@ export default function Home() {
         if (primaryImage) {
             formData.append('image', primaryImage);
           }
-      const response = await axios.post(
-        `${API_URL_SELLER}subCategory/add-subCategory`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        },
-      )
+        
+          let response;
+        if (editMode && editId) {
+              response = await axios.put(
+                `${API_URL_SELLER}subCategory/update-subCategory/${editId}`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${user?.token}`,
+                  },
+                }
+              )
+        }
+        else{
+          response = await axios.post(
+            `${API_URL_SELLER}subCategory/add-subCategory`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${user?.token}`,
+              },
+            }
+          )
+        }
 
       if (response.data.success) {
         showNotification({
-          message: 'Category assigned successfully!',
+          message: editMode ? 'Sub Category updated successfully!' : 'Category assigned successfully!',
           variant: 'success',
         })
+      fetchSellerCategories()
+      resetForm()
       } else {
         showNotification({
           message: 'Failed to assign category',
@@ -124,10 +145,6 @@ export default function Home() {
         })
       }
 
-      fetchSellerCategories()
-
-      setSelectedSubCategory(null)
-      setPrimaryImage(null);
     } catch (error) {
       console.error('Error adding category:', error?.response?.data?.message)
       showNotification({
@@ -136,6 +153,13 @@ export default function Home() {
       })
     }
   }
+const resetForm = () => {
+  setSelectedSubCategory(null)
+  setPrimaryImage(null)
+  setEditMode(false)
+  setEditId(null)
+  setPrimaryImagePreview(null);
+}
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -203,6 +227,8 @@ export default function Home() {
                 <input {...getInputPropsPrimary()} />
                 {primaryImage ? (
                   <img src={URL.createObjectURL(primaryImage)} alt="Primary" height={100} />
+                ) : primaryImagePreview ? (
+                  <img src={primaryImagePreview} alt="Preview" height={100} />
                 ) : (
                   <p>Drag 'n' drop or click to select a primary image</p>
                 )}
@@ -219,22 +245,51 @@ export default function Home() {
           <p className="text-muted">No subcategories assigned yet.</p>
         ) : (
           <Grid
-            data={sellerSubCategories.map((item, index) => [index + 1, item?.subCategory?.name || 'N/A', item._id])}
-            columns={[
+              data={sellerSubCategories.map((item, index) => [
+                index + 1,
+                item?.subCategory?.name || 'N/A',
+                item?.image ? (
+                  <img src={item.image} alt="Subcategory" height={40} />
+                ) : (
+                  'No Image'
+                ),
+                item._id,
+              ])}
+              columns={[
               'No',
               'Sub Category',
+              'Sub Category Image',
               {
                 name: 'Action',
                 sort: false,
-                formatter: (cell, row) => {// _id is the 3rd item in the row
+                formatter: (cell, row) => {
                   const id = row.cells[2].data
+                  const item = sellerSubCategories.find(i => i._id === id)
+
                   return _(
-                    <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
-                      Delete
-                    </button>,
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => {
+                          setSelectedSubCategory({
+                            value: item?.subCategory?._id,
+                            label: item?.subCategory?.name,
+                          })
+                          setEditId(item._id)
+                          setEditMode(true)
+                          setPrimaryImagePreview(item?.image || null)
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
+                        Delete
+                      </button>
+                    </div>
                   )
                 },
-              },
+              }
+
             ]}
             search={true}
             pagination={{
