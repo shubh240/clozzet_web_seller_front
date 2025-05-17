@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
 import PageMetaData from '@/components/PageTitle'
@@ -13,8 +13,7 @@ import { useParams } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 
 export default function Home() {
-  
-  const { categoryId, id } = useParams();
+  const { categoryId, id } = useParams()
 
   const { user } = useAuthContext()
   const { showNotification } = useNotificationContext()
@@ -27,8 +26,7 @@ export default function Home() {
   const [sellerSubCategories, setSellerCategories] = useState([])
   const [editMode, setEditMode] = useState(false)
   const [editId, setEditId] = useState(null)
-  const [primaryImagePreview, setPrimaryImagePreview] = useState(null);
-
+  const [primaryImagePreview, setPrimaryImagePreview] = useState(null)
 
   const fetchCategories = async () => {
     try {
@@ -98,53 +96,43 @@ export default function Home() {
     }
 
     try {
-          const formData = new FormData();
-          formData.append('sellerId', user?._id);
-          formData.append('categoryId', categoryId);
-          formData.append('sellerCategoryId', id);
-          formData.append('subCategoryId', selectedSubCategory?.value);
-        if (primaryImage) {
-            formData.append('image', primaryImage);
-          }
-        
-          let response;
-        if (editMode && editId) {
-              response = await axios.put(
-                `${API_URL_SELLER}subCategory/update-subCategory/${editId}`,
-                formData,
-                {
-                  headers: {
-                    Authorization: `Bearer ${user?.token}`,
-                  },
-                }
-              )
-        }
-        else{
-          response = await axios.post(
-            `${API_URL_SELLER}subCategory/add-subCategory`,
-            formData,
-            {
-              headers: {
-                Authorization: `Bearer ${user?.token}`,
-              },
-            }
-          )
-        }
+      const formData = new FormData()
+      formData.append('sellerId', user?._id)
+      formData.append('categoryId', categoryId)
+      formData.append('sellerCategoryId', id)
+      formData.append('subCategoryId', selectedSubCategory?.value)
+      if (primaryImage) {
+        formData.append('image', primaryImage)
+      }
+
+      let response
+      if (editMode && editId) {
+        response = await axios.put(`${API_URL_SELLER}subCategory/edit-subCategory/${editId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        })
+      } else {
+        response = await axios.post(`${API_URL_SELLER}subCategory/add-subCategory`, formData, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        })
+      }
 
       if (response.data.success) {
         showNotification({
           message: editMode ? 'Sub Category updated successfully!' : 'Category assigned successfully!',
           variant: 'success',
         })
-      fetchSellerCategories()
-      resetForm()
+        fetchSellerCategories()
+        resetForm()
       } else {
         showNotification({
           message: 'Failed to assign category',
           variant: 'danger',
         })
       }
-
     } catch (error) {
       console.error('Error adding category:', error?.response?.data?.message)
       showNotification({
@@ -153,13 +141,13 @@ export default function Home() {
       })
     }
   }
-const resetForm = () => {
-  setSelectedSubCategory(null)
-  setPrimaryImage(null)
-  setEditMode(false)
-  setEditId(null)
-  setPrimaryImagePreview(null);
-}
+  const resetForm = () => {
+    setSelectedSubCategory(null)
+    setPrimaryImage(null)
+    setEditMode(false)
+    setEditId(null)
+    setPrimaryImagePreview(null)
+  }
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -192,34 +180,40 @@ const resetForm = () => {
       }
     }
   }
-    const [primaryImage, setPrimaryImage] = useState(null)
-    // Handle primary image (only 1)
-    const onDropPrimary = useCallback((acceptedFiles) => {
-      if (acceptedFiles.length > 0) {
-        const file = acceptedFiles[0]
-        setPrimaryImage(file)
-      }
-    }, [])
-    const { getRootProps: getRootPropsPrimary, getInputProps: getInputPropsPrimary } = useDropzone({
-      onDrop: onDropPrimary,
-      maxFiles: 1,
-      accept: { 'image/*': [] },
-    })
+  const [primaryImage, setPrimaryImage] = useState(null)
+  // Handle primary image (only 1)
+  const onDropPrimary = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length > 0) {
+      const file = acceptedFiles[0]
+      setPrimaryImage(file)
+    }
+  }, [])
+  const { getRootProps: getRootPropsPrimary, getInputProps: getInputPropsPrimary } = useDropzone({
+    onDrop: onDropPrimary,
+    maxFiles: 1,
+    accept: { 'image/*': [] },
+  })
 
   return (
     <>
       <PageMetaData title="Sub Category" />
       <ComponentContainerCard id="category" title="Sub Category List">
-        <div style={{ maxWidth: '400px' }} className='mt-2'>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="category" className="form-label">
-              Select Sub Category
-            </label>
-            <Select id="category" options={subcategories} value={selectedSubCategory} onChange={setSelectedSubCategory} placeholder="Choose a category..." />
-          </div>
-           <div className="mb-4">
-              <label className="form-label">SubCategory Image</label>
+        <div style={{ maxWidth: '400px' }} className="mt-2">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="category" className="form-label">
+                Select Sub Category
+              </label>
+              <Select
+                id="category"
+                options={subcategories}
+                value={selectedSubCategory}
+                onChange={setSelectedSubCategory}
+                placeholder="Choose a category..."
+              />
+            </div>
+            <div className="mb-4">
+              <label className="form-label">Image</label>
               <div
                 {...getRootPropsPrimary()}
                 className="dropzone border p-4 bg-light text-center"
@@ -234,10 +228,10 @@ const resetForm = () => {
                 )}
               </div>
             </div>
-          <button type="submit" className="btn btn-primary">
-            Add
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary">
+              Add
+            </button>
+          </form>
         </div>
       </ComponentContainerCard>
       <ComponentContainerCard id="category" title="Sub Category List">
@@ -245,26 +239,27 @@ const resetForm = () => {
           <p className="text-muted">No subcategories assigned yet.</p>
         ) : (
           <Grid
-              data={sellerSubCategories.map((item, index) => [
-                index + 1,
-                item?.subCategory?.name || 'N/A',
-                item?.image ? (
-                  <img src={item.image} alt="Subcategory" height={40} />
-                ) : (
-                  'No Image'
-                ),
-                item._id,
-              ])}
-              columns={[
+            data={sellerSubCategories.map((item, index) => [index + 1, item?.subCategory?.name || 'N/A', item])}
+            columns={[
               'No',
               'Sub Category',
-              'Sub Category Image',
+              {
+                name: 'Image',
+                sort: false,
+                formatter: (cell, row) => {
+                  const item = row.cells[2].data;
+                  
+                  return _(
+                    <img src={item?.image} alt={item?.subCategory?.name} width="40" height="40" style={{ objectFit: 'cover', borderRadius: '6px' }} />,
+                  )
+                },
+              },
               {
                 name: 'Action',
                 sort: false,
                 formatter: (cell, row) => {
-                  const id = row.cells[2].data
-                  const item = sellerSubCategories.find(i => i._id === id)
+                  const item = row.cells[2].data
+                  const id = item?._id
 
                   return _(
                     <div className="d-flex gap-2">
@@ -278,18 +273,16 @@ const resetForm = () => {
                           setEditId(item._id)
                           setEditMode(true)
                           setPrimaryImagePreview(item?.image || null)
-                        }}
-                      >
+                        }}>
                         Edit
                       </button>
                       <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
                         Delete
                       </button>
-                    </div>
+                    </div>,
                   )
                 },
-              }
-
+              },
             ]}
             search={true}
             pagination={{

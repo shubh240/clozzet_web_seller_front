@@ -111,7 +111,7 @@ export default function Home() {
             ))}
             <button
               type="button"
-              className="btn btn-secondary mb-3"
+              className="btn btn-primary mb-3"
               onClick={() => setSizeQuantityList([...sizeQuantityList, { size: '', quantity: '' }])}>
               + Add Size
             </button>
