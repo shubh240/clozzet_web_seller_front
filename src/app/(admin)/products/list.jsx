@@ -137,6 +137,7 @@ export default function Home() {
   if (loading) {
     return <Spinner size="sm" color="primary" />
   }
+  
   return (
     <>
       <PageMetaData />

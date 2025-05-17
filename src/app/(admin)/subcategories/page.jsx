@@ -6,17 +6,19 @@ import { API_URL_ADMIN, API_URL_SELLER } from '../../../context/constants'
 import { useAuthContext } from '../../../context/useAuthContext'
 import { useNotificationContext } from '@/context/useNotificationContext'
 import ComponentContainerCard from '@/components/ComponentContainerCard'
-// import { Grid } from 'gridjs-react'
 import { Grid, _ } from 'gridjs-react'
 import Swal from 'sweetalert2'
 import { useParams } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
+import Spinner from '@/components/Spinner'
 
 export default function Home() {
   const { categoryId, id } = useParams()
 
   const { user } = useAuthContext()
   const { showNotification } = useNotificationContext()
+  const [loading, setLoading] = useState(false)
+
 
   const didFetch = useRef(false)
 
@@ -30,6 +32,8 @@ export default function Home() {
 
   const fetchCategories = async () => {
     try {
+      setLoading(true)
+
       axios
         .get(`${API_URL_ADMIN}subCategory/list-sub-category?category=${categoryId}`)
         .then((res) => {
@@ -38,9 +42,13 @@ export default function Home() {
             label: cat.name,
           }))
           setSubCategories(options)
+          setLoading(false)
+
         })
         .catch((err) => {
           console.error('Failed to fetch subcategories', err)
+          setLoading(false)
+
           showNotification({
             title: 'Error',
             message: 'Failed to fetch subcategories',
@@ -48,6 +56,8 @@ export default function Home() {
           })
         })
     } catch (err) {
+          setLoading(false)
+
       showNotification({
         title: 'Error',
         message: 'Failed to fetch seller subcategories',
@@ -58,13 +68,19 @@ export default function Home() {
 
   const fetchSellerCategories = async () => {
     try {
+          setLoading(true)
+      
       const res = await axios.get(`${API_URL_SELLER}subCategory/list-subCategory?sellerId=${user?._id}&sellerCategoryId=${id}`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       })
       setSellerCategories(res.data.data)
+          setLoading(false)
+
     } catch (err) {
+          setLoading(false)
+
       showNotification({
         title: 'Error',
         message: 'Failed to fetch seller subcategories',
@@ -96,6 +112,8 @@ export default function Home() {
     }
 
     try {
+      setLoading(true)
+
       const formData = new FormData()
       formData.append('sellerId', user?._id)
       formData.append('categoryId', categoryId)
@@ -119,6 +137,7 @@ export default function Home() {
           },
         })
       }
+      setLoading(false)
 
       if (response.data.success) {
         showNotification({
@@ -134,6 +153,8 @@ export default function Home() {
         })
       }
     } catch (error) {
+      setLoading(false)
+
       console.error('Error adding category:', error?.response?.data?.message)
       showNotification({
         message: error?.response?.data?.message || 'Something went wrong. Please try again.',
@@ -193,6 +214,10 @@ export default function Home() {
     maxFiles: 1,
     accept: { 'image/*': [] },
   })
+
+  if (loading) {
+    return <Spinner size="sm" color="primary" />
+  }
 
   return (
     <>
@@ -264,7 +289,7 @@ export default function Home() {
                   return _(
                     <div className="d-flex gap-2">
                       <button
-                        className="btn btn-sm btn-outline-primary"
+                        className="rounded-pill btn btn-sm btn-outline-primary me-2"
                         onClick={() => {
                           setSelectedSubCategory({
                             value: item?.subCategory?._id,
@@ -276,7 +301,7 @@ export default function Home() {
                         }}>
                         Edit
                       </button>
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
+                      <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
                         Delete
                       </button>
                     </div>,

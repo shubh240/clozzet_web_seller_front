@@ -335,7 +335,7 @@ export default function Home() {
 
       console.error(error)
       showNotification({
-        message: error?.response?.data?.message || 'Failed to submit product',
+        message: error?.response?.data?.message || 'Failed to update product',
         variant: 'danger',
       })
     }
@@ -531,74 +531,12 @@ export default function Home() {
 
             {/* Submit Button */}
             <button type="submit" className="btn btn-success">
-              Submit Product
+              Update Product
             </button>
           </form>
         </CardBody>
       </Card>
 
-      {/* <Card>
-        <CardBody>
-          <div className="d-flex align-items-center justify-content-between mb-3">
-            <h3 className="mb-0">Product Size & Quantity</h3>
-          </div>
-          <form>
-            <div className="mb-4">
-              <label className="form-label">Size & Quantity</label>
-              {sizeQuantityList.map((item, index) => (
-                <div className="row mb-2" key={index}>
-                  <div className="col-md-5">
-                    <input
-                      type="text"
-                      placeholder="Size (e.g., S, M, L)"
-                      className="form-control"
-                      value={item.size}
-                      onChange={(e) => {
-                        const updated = [...sizeQuantityList]
-                        updated[index].size = e.target.value
-                        setSizeQuantityList(updated)
-                      }}
-                    />
-                  </div>
-                  <div className="col-md-5">
-                    <input
-                      type="number"
-                      placeholder="Quantity"
-                      className="form-control"
-                      value={item.quantity}
-                      onChange={(e) => {
-                        const updated = [...sizeQuantityList]
-                        updated[index].quantity = e.target.value
-                        setSizeQuantityList(updated)
-                      }}
-                    />
-                  </div>
-                  <div className="col-md-2 d-flex align-items-center">
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={() => {
-                        const updated = sizeQuantityList.filter((_, i) => i !== index)
-                        setSizeQuantityList(updated.length > 0 ? updated : [{ size: '', quantity: '' }])
-                      }}>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-              <button
-                type="button"
-                className="btn btn-primary mt-2"
-                onClick={() => setSizeQuantityList([...sizeQuantityList, { size: '', quantity: '' }])}>
-                + Add Size
-              </button>
-            </div>
-            <button type="submit" className="btn btn-success">
-              Submit Product
-            </button>
-          </form>
-        </CardBody>
-      </Card> */}
     </>
   )
 }

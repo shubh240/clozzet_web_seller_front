@@ -6,16 +6,17 @@ import { API_URL_ADMIN, API_URL_SELLER } from '../../../context/constants'
 import { useAuthContext } from '../../../context/useAuthContext'
 import { useNotificationContext } from '@/context/useNotificationContext'
 import ComponentContainerCard from '@/components/ComponentContainerCard'
-// import { Grid } from 'gridjs-react'
 import { Grid, _ } from 'gridjs-react'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import Spinner from '@/components/Spinner'
 
 export default function Home() {
   const navigate = useNavigate()
 
   const { user } = useAuthContext()
   const { showNotification } = useNotificationContext()
+  const [loading, setLoading] = useState(false)
 
   const didFetch = useRef(false)
 
@@ -26,6 +27,8 @@ export default function Home() {
 
   const fetchCategories = async () => {
     try {
+      setLoading(true)
+
       axios
         .get(`${API_URL_ADMIN}category/list-category`)
         .then((res) => {
@@ -34,8 +37,11 @@ export default function Home() {
             label: cat.name,
           }))
           setCategories(options)
+          setLoading(false)
         })
         .catch((err) => {
+          setLoading(false)
+
           console.error('Failed to fetch categories', err)
           showNotification({
             message: 'Failed to fetch categories',
@@ -43,6 +49,8 @@ export default function Home() {
           })
         })
     } catch (err) {
+      setLoading(false)
+
       showNotification({
         message: 'Failed to fetch seller categories',
         variant: 'danger',
@@ -52,13 +60,19 @@ export default function Home() {
 
   const fetchSellerCategories = async () => {
     try {
+      setLoading(true)
+
       const res = await axios.get(`${API_URL_SELLER}category/list-category`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       })
+      setLoading(false)
+
       setSellerCategories(res.data.data)
     } catch (err) {
+      setLoading(false)
+
       showNotification({
         message: 'Failed to fetch seller categories',
         variant: 'danger',
@@ -89,6 +103,8 @@ export default function Home() {
     }
 
     try {
+      setLoading(true)
+
       const payload = {
         sellerId: user?._id,
         categoryId: selectedCategory.value,
@@ -104,6 +120,8 @@ export default function Home() {
           },
         },
       )
+
+      setLoading(false)
 
       if (response.data.success) {
         showNotification({
@@ -121,6 +139,8 @@ export default function Home() {
 
       setSelectedCategory(null)
     } catch (error) {
+      setLoading(false)
+
       console.error('Error adding category:', error?.response?.data?.message)
       showNotification({
         message: error?.response?.data?.message || 'Something went wrong. Please try again.',
@@ -159,6 +179,10 @@ export default function Home() {
         })
       }
     }
+  }
+
+  if (loading) {
+    return <Spinner size="sm" color="primary" />
   }
 
   return (

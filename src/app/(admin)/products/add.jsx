@@ -280,7 +280,7 @@ export default function Home() {
 
       console.error(error)
       showNotification({
-        message: error?.response?.data?.message || 'Failed to submit product',
+        message: error?.response?.data?.message || 'Failed to add product',
         variant: 'danger',
       })
     }
@@ -514,7 +514,7 @@ export default function Home() {
 
             {/* Submit Button */}
             <button type="submit" className="btn btn-success">
-              Submit Product
+              Add Product
             </button>
           </form>
         </CardBody>

@@ -9,11 +9,14 @@ import { Grid, _ } from 'gridjs-react'
 import 'gridjs/dist/theme/mermaid.css'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import Spinner from '@/components/Spinner'
 
 export default function Home() {
   const navigate = useNavigate()
   const { user } = useAuthContext()
   const { showNotification } = useNotificationContext()
+  const [loading, setLoading] = useState(false)
+
   const didFetch = useRef(false)
 
   const [name, setName] = useState('')
@@ -24,13 +27,19 @@ export default function Home() {
 
   const fetchSizeCharts = async () => {
     try {
+      setLoading(true)
+
       const res = await axios.get(`${API_URL_SELLER}sizeChart/list-sizeChart`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       })
+      setLoading(false)
+
       setSizeCharts(res.data?.data || [])
     } catch (err) {
+      setLoading(false)
+
       showNotification({
         message: 'Failed to fetch size charts',
         variant: 'danger',
@@ -53,6 +62,8 @@ export default function Home() {
     }
 
     try {
+      setLoading(true)
+
       const formData = new FormData()
       formData.append('name', name)
       if (image) formData.append('image', image)
@@ -68,6 +79,8 @@ export default function Home() {
             },
           }
         )
+
+      setLoading(false)
 
         if (response.data.success) {
           showNotification({ message: 'Size Chart updated!', variant: 'success' })
@@ -95,6 +108,8 @@ export default function Home() {
       setImage(null)
       setImagePreview(null)
     } catch (error) {
+      setLoading(false)
+
       showNotification({
         message: error?.response?.data?.message || 'Error while saving size chart',
         variant: 'danger',
@@ -134,6 +149,10 @@ export default function Home() {
     }
   }
 
+  if (loading) {
+    return <Spinner size="sm" color="primary" />
+  }
+  
   return (
     <>
       <PageMetaData title="Size Chart" />
@@ -181,7 +200,7 @@ export default function Home() {
               </div>
             )}
             <button type="submit" className="btn btn-primary">
-              {editingId ? 'Update' : 'Create'}
+              {editingId ? 'Update' : 'Add'}
             </button>
           </form>
         </div>
