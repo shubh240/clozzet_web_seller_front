@@ -53,7 +53,7 @@ export default function Home() {
       setLoading(false)
 
       showNotification({
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to data',
         variant: 'danger',
       })
     }
@@ -75,7 +75,7 @@ export default function Home() {
       setLoading(false)
 
       showNotification({
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to data',
         variant: 'danger',
       })
     }
@@ -100,7 +100,7 @@ export default function Home() {
       setLoading(false)
 
       showNotification({
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to data',
         variant: 'danger',
       })
     }

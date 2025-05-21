@@ -7,7 +7,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as yup from 'yup'
 import { useAuthContext } from '@/context/useAuthContext'
 import { useNotificationContext } from '@/context/useNotificationContext'
-import httpClient from '@/helpers/httpClient'
 import { API_URL_SELLER } from '../../../../../context/constants'
 const useSignIn = () => {
   const [loading, setLoading] = useState(false)
@@ -82,32 +81,6 @@ const useSignIn = () => {
     }
   })
 
-  const login1 = handleSubmit(async (values) => {
-    try {
-      const res = await httpClient.post('/login', values)
-      if (res.data.token) {
-        saveSession({
-          ...(res.data ?? {}),
-          token: res.data.token,
-        })
-        redirectUser()
-        showNotification({
-          message: 'Successfully logged in. Redirecting....',
-          variant: 'success',
-        })
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e) {
-      if (e.response?.data?.error) {
-        showNotification({
-          message: e.response?.data?.error,
-          variant: 'danger',
-        })
-      }
-    } finally {
-      setLoading(false)
-    }
-  })
   return {
     loading,
     login,

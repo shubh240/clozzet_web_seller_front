@@ -52,7 +52,7 @@ export default function Home() {
       setLoading(false)
 
       showNotification({
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to data',
         variant: 'danger',
       })
     }
@@ -74,7 +74,7 @@ export default function Home() {
       setLoading(false)
 
       showNotification({
-        message: 'Failed to fetch seller categories',
+        message: 'Failed to data',
         variant: 'danger',
       })
     }
@@ -113,7 +113,6 @@ export default function Home() {
       const response = await axios.post(
         `${API_URL_SELLER}category/add-category`,
         payload,
-
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,

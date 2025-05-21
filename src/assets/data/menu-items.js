@@ -32,6 +32,13 @@ export const MENU_ITEMS = [
     url: '/products-list',
   },
   {
+    key: 'orders-list',
+    icon: 'solar:clipboard-list-outline',
+
+    label: 'Orders',
+    url: '/orders-list',
+  },
+  {
     key: 'menuitem',
     icon: 'solar:share-broken',
     label: 'Menu Item',
