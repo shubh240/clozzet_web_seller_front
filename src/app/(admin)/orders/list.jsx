@@ -26,11 +26,15 @@ export default function Home() {
   const fetchData = async () => {
     try {
       setLoading(true)
-
-      const res = await axios.post(`${API_URL_SELLER}order/list-order`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
+      const payload = {
+        sellerId: user?._id,
+      }
+      const res = await axios.post(`${API_URL_SELLER}order/list-order`, 
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
       })
       setData(res?.data?.data?.orders)
       setLoading(false)
@@ -106,7 +110,7 @@ export default function Home() {
                     const id = item._id
                     return _(
                       <>
-                        <button className="rounded-pill btn btn-sm btn-outline-info me-2" onClick={() => navigate(`/orders-details/${id}`)}>
+                        <button className="rounded-pill btn btn-sm btn-outline-info me-2" onClick={() => navigate(`/order-details/${id}`)}>
                           Details
                         </button>
                       </>,
