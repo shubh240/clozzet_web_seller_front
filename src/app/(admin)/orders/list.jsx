@@ -30,7 +30,7 @@ export default function Home() {
         sellerId: user?._id,
       }
       const res = await axios.post(`${API_URL_SELLER}order/list-order`, 
-        {},
+        payload,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -74,7 +74,7 @@ export default function Home() {
             <p className="text-muted">No orders found.</p>
           ) : (
             <Grid
-              data={data.map((item) => [item, item?.customerId?.fullName, item?.paymentStatus, item?.totalAmount, item?.createdAt])}
+              data={data?.map((item) => [item, item?.customerId?.fullName, item?.paymentStatus, item?.totalAmount, item?.createdAt])}
               columns={[
                 {
                   name: 'Order No.',
