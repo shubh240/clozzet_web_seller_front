@@ -21,6 +21,7 @@ export default function Home() {
 
   const [categoryList, setCategoryList] = useState([])
   const [subCategoryList, setSubCategoryList] = useState([])
+  const [colorList, setColorList] = useState([])
   const [sizeChartList, setSizeChartList] = useState([])
 
   const fetchCategory = async () => {
@@ -81,6 +82,40 @@ export default function Home() {
     }
   }
 
+  const fetchColor = async () => {
+    try {
+      setLoading(true)
+      axios
+        .get(`${API_URL_ADMIN}color/list-colors`)
+        .then((res) => {
+          const options = res.data.data.colors.map((cat) => ({
+            value: cat._id,
+            label: cat.name,
+          }))
+          setColorList(options)
+          setFormData((prev) => ({
+            ...prev,
+          }))
+        })
+        .catch((err) => {
+          console.error('Failed to fetch colors', err)
+          setLoading(false)
+
+          showNotification({
+            message: 'Failed to fetch colors',
+            variant: 'danger',
+          })
+        })
+    } catch (err) {
+      setLoading(false)
+
+      showNotification({
+        message: 'Failed to data',
+        variant: 'danger',
+      })
+    }
+  }
+
   const fetchSizeChart = async (category) => {
     try {
       setLoading(true)
@@ -112,6 +147,7 @@ export default function Home() {
     setLoading(true)
     fetchCategory()
     fetchSizeChart()
+    fetchColor()
     didFetch.current = true
     setLoading(false)
   }, [])
@@ -131,6 +167,7 @@ export default function Home() {
     brandName: '',
     primaryImage: null,
     images: [],
+    colors:null
   })
 
   const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' }])
@@ -201,7 +238,7 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!formData.name || !formData.category || !formData.subcategory) {
+    if (!formData.name || !formData.category || !formData.subcategory || !formData.colors) {
       return showNotification({
         message: 'Please fill all required fields',
         variant: 'warning',
@@ -229,6 +266,7 @@ export default function Home() {
       form.append('originalPrice', formData.originalPrice)
       form.append('sizeChart', formData.sizeChart)
       form.append('brandName', formData.brandName)
+      form.append("colors", formData.colors.value)
 
       if (formData.primaryImage) {
         form.append('primaryImage', formData.primaryImage)
@@ -366,11 +404,26 @@ export default function Home() {
                 />
               </div>
               <div className="col-md-4">
+                <label className="form-label">Color</label>
+                <Select
+                  id="colors"
+                  options={colorList}
+                  value={formData?.colors}
+                  placeholder="Choose a color..."
+                  onChange={(selectedOption) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      colors: selectedOption,
+                    }))
+                  }}
+                />
+              </div>
+              <div className="col-md-4">
                 <label className="form-label">Brand Name</label>
                 <input
                   type="text"
                   name="brandName"
-                  value={formData.sbrandNameu}
+                  value={formData.brandName}
                   onChange={handleChange}
                   className="form-control"
                   placeholder="Enter brand name"
@@ -470,7 +523,7 @@ export default function Home() {
                       type="text"
                       placeholder="Size (e.g., S, M, L)"
                       className="form-control"
-                      value={item.size}
+                      value={item.size} 
                       onChange={(e) => {
                         const updated = [...sizeQuantityList]
                         updated[index].size = e.target.value
