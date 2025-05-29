@@ -96,7 +96,6 @@ export default function Home() {
           setFormData((prev) => ({
             ...prev,
           }))
-          // setSubCategoryList([])
         })
         .catch((err) => {
           console.error('Failed to fetch colors', err)
@@ -239,7 +238,7 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!formData.name || !formData.category || !formData.subcategory) {
+    if (!formData.name || !formData.category || !formData.subcategory || !formData.colors) {
       return showNotification({
         message: 'Please fill all required fields',
         variant: 'warning',
@@ -267,6 +266,7 @@ export default function Home() {
       form.append('originalPrice', formData.originalPrice)
       form.append('sizeChart', formData.sizeChart)
       form.append('brandName', formData.brandName)
+      form.append("colors", formData.colors.value)
 
       if (formData.primaryImage) {
         form.append('primaryImage', formData.primaryImage)
