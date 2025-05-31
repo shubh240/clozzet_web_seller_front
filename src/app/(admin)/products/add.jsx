@@ -167,7 +167,7 @@ export default function Home() {
     brandName: '',
     primaryImage: null,
     images: [],
-    colors:null
+    colors: null,
   })
 
   const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' }])
@@ -266,7 +266,7 @@ export default function Home() {
       form.append('originalPrice', formData.originalPrice)
       form.append('sizeChart', formData.sizeChart)
       form.append('brandName', formData.brandName)
-      form.append("colors", formData.colors.value)
+      form.append('colors', formData.colors.value)
 
       if (formData.primaryImage) {
         form.append('primaryImage', formData.primaryImage)
@@ -418,6 +418,9 @@ export default function Home() {
                   }}
                 />
               </div>
+            </div>
+
+            <div className="row mb-3">
               <div className="col-md-4">
                 <label className="form-label">Brand Name</label>
                 <input
@@ -430,7 +433,6 @@ export default function Home() {
                 />
               </div>
             </div>
-
             <div className="row mb-3">
               <div className="col-md-4">
                 <label className="form-label">Selling Price</label>
@@ -523,7 +525,7 @@ export default function Home() {
                       type="text"
                       placeholder="Size (e.g., S, M, L)"
                       className="form-control"
-                      value={item.size} 
+                      value={item.size}
                       onChange={(e) => {
                         const updated = [...sizeQuantityList]
                         updated[index].size = e.target.value
