@@ -25,6 +25,13 @@ export const MENU_ITEMS = [
     url: '/sizeCharts',
   },
   {
+    key: 'coupons',
+    icon: 'solar:ticket-outline',
+
+    label: 'Coupons',
+    url: '/coupons',
+  },
+  {
     key: 'products-list',
     icon: 'solar:box-outline',
 

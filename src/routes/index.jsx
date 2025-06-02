@@ -6,6 +6,7 @@ const Analytics = lazy(() => import('@/app/(admin)/dashboard/analytics/page'));
 const Categories = lazy(() => import('@/app/(admin)/categories/page'));
 const SubCategories = lazy(() => import('@/app/(admin)/subcategories/page'));
 const SizeCharts = lazy(() => import('@/app/(admin)/sizechart/page'));
+const Coupons = lazy(() => import('@/app/(admin)/coupons/page'));
 
 // Products
 const ProductsLists= lazy(() => import('@/app/(admin)/products/list'));
@@ -68,6 +69,11 @@ const sellerRoutes = [{
   path: '/sizeCharts',
   name: 'SizeCharts',
   element: <SizeCharts />
+},
+{
+  path: '/coupons',
+  name: 'Coupons',
+  element: <Coupons />
 },
 {
   path: '/products-list',
