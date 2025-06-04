@@ -166,8 +166,6 @@ export default function Home() {
     images: [],
   })
 
-  const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' }])
-
   useEffect(() => {
     if (productData) {
       setFormData({
@@ -352,7 +350,7 @@ export default function Home() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-3">
-            <h3 className="mb-0">Product Edit</h3>
+            <h4 className="mb-0">Product Edit</h4>
           </div>
           <form onSubmit={handleSubmit}>
             {/* Product Details */}
@@ -530,8 +528,8 @@ export default function Home() {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="btn btn-success">
-              Update Product
+            <button type="submit" className="btn btn-primary">
+              Update
             </button>
           </form>
         </CardBody>

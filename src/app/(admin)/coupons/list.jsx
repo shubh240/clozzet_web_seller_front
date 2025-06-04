@@ -135,7 +135,7 @@ export default function Home() {
     <>
       <PageMetaData title="Coupon" />
 
-      <ComponentContainerCard id="couponList" title="Coupon List">
+      <ComponentContainerCard id="couponList" title="Coupon List" addButtonLink="/coupons-add">
         {coupons.length === 0 ? (
           <p className="text-muted">No Coupons available.</p>
         ) : (
@@ -143,17 +143,26 @@ export default function Home() {
             data={(coupons || []).map((item, index) => {
               return [
                 index + 1,
+                item,
                 item?.name,
                 item?.couponCode,
                 item?.discountType.charAt(0).toUpperCase() + item?.discountType.slice(1),
                 item?.discountValue,
                 item?.currentUsagesCount + '/' + item?.usageLimit,
                 formatToISTOnlyDate(item?.validFrom) + ' TO ' + formatToISTOnlyDate(item?.validTill),
-                item,
               ]
             })}
             columns={[
               'No',
+              {
+                name: 'Image',
+                sort: false,
+                formatter: (cell, row) => {
+                  const item = row.cells[1].data
+
+                  return _(<img src={item?.imageUrl} alt={item?.name} width="40" height="40" style={{ objectFit: 'cover', borderRadius: '6px' }} />)
+                },
+              },
               'Name',
               'Code',
               'Type',
@@ -164,7 +173,7 @@ export default function Home() {
                 name: 'Status',
                 sort: false,
                 formatter: (cell, row) => {
-                  const data = row.cells[7].data
+                  const data = row.cells[1].data
                   console.log(data)
                   const id = data._id
                   const isActive = data.isActive === true
@@ -180,19 +189,18 @@ export default function Home() {
                 name: 'Action',
                 sort: false,
                 formatter: (cell, row) => {
-                  const data = row.cells[7].data
+                  const data = row.cells[1].data
                   const id = data._id
 
                   return _(
                     <>
-                      {/* <button
+                      <button
                         className="rounded-pill btn btn-sm btn-outline-primary me-2"
                         onClick={() => {
-                          navigate('/')
-                        }}
-                      >
+                          navigate(`/coupons-edit/${id}`)
+                        }}>
                         Edit
-                      </button> */}
+                      </button>
                       <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
                         Delete
                       </button>

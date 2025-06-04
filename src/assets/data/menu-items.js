@@ -29,7 +29,7 @@ export const MENU_ITEMS = [
     icon: 'solar:ticket-outline',
 
     label: 'Coupons',
-    url: '/coupons',
+    url: '/coupons-list',
   },
   {
     key: 'products-list',

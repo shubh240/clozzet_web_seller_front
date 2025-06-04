@@ -95,7 +95,7 @@ export default function Home() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-3">
-            <h3 className="mb-0">Product Inventory List</h3>
+            <h4 className="mb-0">Product Inventory List</h4>
             <Link className="btn btn-primary" to={`/products-inventory-add/${productId}`}>Add Inventory</Link>
           </div>
 

@@ -335,7 +335,7 @@ export default function Home() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-3">
-            <h3 className="mb-0">Product Add</h3>
+            <h4 className="mb-0">Product Add</h4>
           </div>
           <form onSubmit={handleSubmit}>
             {/* Product Details */}
@@ -568,7 +568,7 @@ export default function Home() {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="btn btn-success">
+            <button type="submit" className="btn btn-primary">
               Add Product
             </button>
           </form>

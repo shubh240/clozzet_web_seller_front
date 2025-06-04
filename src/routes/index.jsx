@@ -6,7 +6,6 @@ const Analytics = lazy(() => import('@/app/(admin)/dashboard/analytics/page'));
 const Categories = lazy(() => import('@/app/(admin)/categories/page'));
 const SubCategories = lazy(() => import('@/app/(admin)/subcategories/page'));
 const SizeCharts = lazy(() => import('@/app/(admin)/sizechart/page'));
-const Coupons = lazy(() => import('@/app/(admin)/coupons/page'));
 
 // Products
 const ProductsLists= lazy(() => import('@/app/(admin)/products/list'));
@@ -18,6 +17,11 @@ const InventoryAdd = lazy(() => import('@/app/(admin)/products/inventory/add'));
 
 const OrdersList= lazy(() => import('@/app/(admin)/orders/list'));
 const OrdersDetails= lazy(() => import('@/app/(admin)/orders/details'));
+
+const CouponsLists = lazy(() => import('@/app/(admin)/coupons/list'));
+const CouponsAdd = lazy(() => import('@/app/(admin)/coupons/add'));
+const CouponsEdit = lazy(() => import('@/app/(admin)/coupons/edit'));
+
 
 // const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
 // const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
@@ -71,9 +75,19 @@ const sellerRoutes = [{
   element: <SizeCharts />
 },
 {
-  path: '/coupons',
+  path: '/coupons-list',
   name: 'Coupons',
-  element: <Coupons />
+  element: <CouponsLists />
+},
+{
+  path: '/coupons-add',
+  name: 'Coupon Add',
+  element: <CouponsAdd />
+},
+{
+  path: '/coupons-edit/:id',
+  name: 'Coupons Edit',
+  element: <CouponsEdit />
 },
 {
   path: '/products-list',

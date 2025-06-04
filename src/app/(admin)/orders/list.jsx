@@ -67,7 +67,7 @@ export default function Home() {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-3">
-            <h3 className="mb-0">Order List</h3>
+            <h4 className="mb-0">Order List</h4>
           </div>
 
           {data?.length === 0 ? (
