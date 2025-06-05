@@ -48,7 +48,42 @@ export default function Home() {
     }
   }
 
-  // Fetch categories
+const handleStatusChange = async (orderId, newStatus) => {
+  try {
+    const result = await Swal.fire({
+      title: `Are you sure you want to mark as ${newStatus}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: `Yes, ${newStatus}`,
+    });
+
+    if (!result.isConfirmed) return;
+
+    await axios.put(
+      `${API_URL_SELLER}order/update-order-status/${orderId}`,
+      { status: newStatus },
+      {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      }
+    );
+
+    showNotification({
+      message: `Order status updated to ${newStatus}`,
+      variant: 'success',
+    });
+
+    fetchData(); // refresh data
+  } catch (err) {
+    showNotification({
+      message: 'Failed to update order status',
+      variant: 'danger',
+    });
+  }
+};
+
+
   useEffect(() => {
     if (didFetch.current) return
     fetchData()
@@ -100,6 +135,27 @@ export default function Home() {
                   formatter: (cell, row) => {
                     const item = row.cells[0].data
                     return formatToIST(item?.createdAt)
+                  },
+                },
+                {
+                  name: 'Order Status',
+                  formatter: (cell, row) => {
+                    const item = row.cells[0].data;
+                    const currentStatus = item?.orderStatus || "Pending";
+
+                    return _(
+                      <select
+                        className="form-select form-select-sm"
+                        value={currentStatus}
+                        onChange={(e) => handleStatusChange(item._id, e.target.value)}
+                        disabled={currentStatus !== "Pending"} // Optional: lock after decision
+                        style={{ minWidth: "130px" }}
+                      >
+                        <option value="Pending" disabled>Pending</option>
+                        <option value="Accepted">Accept</option>
+                        <option value="Rejected">Reject</option>
+                      </select>
+                    );
                   },
                 },
                 {
