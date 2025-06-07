@@ -18,12 +18,12 @@ const TopNavigationBar = () => {
           </div>
           <div className="d-flex align-items-center gap-1">
             {/* Toggle Theme Mode */}
-            <ThemeModeToggle />
+            {/* <ThemeModeToggle /> */}
 
             {/* Apps Dropdown */}
-            <Suspense>
+            {/* <Suspense>
               <FullScreenToggler />
-            </Suspense>
+            </Suspense> */}
 
             {/* Notification Dropdown */}
             {/* <Suspense>
