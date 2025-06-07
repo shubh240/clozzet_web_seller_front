@@ -174,7 +174,6 @@ export default function Home() {
                 sort: false,
                 formatter: (cell, row) => {
                   const data = row.cells[1].data
-                  console.log(data)
                   const id = data._id
                   const isActive = data.isActive === true
 

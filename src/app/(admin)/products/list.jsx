@@ -23,10 +23,11 @@ export default function Home() {
   const [data, setData] = useState([])
 
   const fetchData = async () => {
-    try {
+    try { 
+      const storeId = user?.store?.storeId 
       setLoading(true)
 
-      const res = await axios.get(`${API_URL_SELLER}products/list-product`, {
+      const res = await axios.get(`${API_URL_SELLER}products/list-product?storeId=${storeId}`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -229,6 +230,9 @@ export default function Home() {
                         </button>
                         <button className="rounded-pill btn btn-sm btn-outline-secondary me-2" onClick={() => navigate(`/products-inventory-list/${id}`)}>
                           Inventory
+                        </button>
+                        <button className="rounded-pill btn btn-sm btn-outline-secondary me-2" onClick={() => navigate(`/products-reviews-list/${id}`)}>
+                          Reviews
                         </button>
                         <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(id)}>
                           Delete

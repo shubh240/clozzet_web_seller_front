@@ -13,7 +13,7 @@ const ComponentContainerCard = ({ title, id, description, children, titleClass, 
             </a>
           </CardTitle>
           {addButtonLink && (
-            <Link to={addButtonLink} class="btn btn-primary">
+            <Link to={addButtonLink} className="btn btn-primary">
               Add
             </Link>
           )}

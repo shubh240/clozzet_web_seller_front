@@ -15,6 +15,8 @@ const ProductsEdit= lazy(() => import('@/app/(admin)/products/edit'));
 const InventoryList = lazy(() => import('@/app/(admin)/products/inventory/list'));
 const InventoryAdd = lazy(() => import('@/app/(admin)/products/inventory/add'));
 
+const ProductReviewList = lazy(() => import('@/app/(admin)/products/reviews/list'));
+
 const OrdersList= lazy(() => import('@/app/(admin)/orders/list'));
 const OrdersDetails= lazy(() => import('@/app/(admin)/orders/details'));
 
@@ -113,6 +115,11 @@ const sellerRoutes = [{
   path: '/products-inventory-add/:productId',
   name: 'Product Add',
   element: <InventoryAdd />
+},
+{
+  path: '/products-reviews-list/:productId',
+  name: 'Products',
+  element: <ProductReviewList />
 },
 {
   path: '/orders-list',
