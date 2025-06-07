@@ -25,25 +25,9 @@ const CouponsAdd = lazy(() => import('@/app/(admin)/coupons/add'));
 const CouponsEdit = lazy(() => import('@/app/(admin)/coupons/edit'));
 
 
-// const Finance = lazy(() => import('@/app/(admin)/dashboard/finance/page'))
-// const Sales = lazy(() => import('@/app/(admin)/dashboard/sales/page'))
-
-// const Maintenance = lazy(() => import('@/app/(other)/maintenance/page'));
-// const ComingSoon = lazy(() => import('@/app/(other)/coming-soon/page'));
 
 // Auth Routes
 const AuthSignIn2 = lazy(() => import('@/app/(other)/auth/sign-in-2/page'));
-// const AuthSignUp2 = lazy(() => import('@/app/(other)/auth/sign-up-2/page'));
-
-// Apps Routes
-// const EcommerceProducts = lazy(() => import('@/app/(admin)/ecommerce/products/page'))
-// const EcommerceProductDetails = lazy(() => import('@/app/(admin)/ecommerce/products/[productId]/page'))
-// const EcommerceProductCreate = lazy(() => import('@/app/(admin)/ecommerce/products/create/page'))
-// const EcommerceCustomers = lazy(() => import('@/app/(admin)/ecommerce/customers/page'))
-// const EcommerceSellers = lazy(() => import('@/app/(admin)/ecommerce/sellers/page'))
-// const EcommerceOrders = lazy(() => import('@/app/(admin)/ecommerce/orders/page'))
-// const EcommerceOrderDetails = lazy(() => import('@/app/(admin)/ecommerce/orders/[orderId]/page'))
-// const EcommerceInventory = lazy(() => import('@/app/(admin)/ecommerce/inventory/page'))
 
 export const authRoutes = [{
   name: 'Sign In',
