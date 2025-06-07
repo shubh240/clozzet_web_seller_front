@@ -22,6 +22,8 @@ export default function Home() {
   const [replyingReviewId, setReplyingReviewId] = useState(null)
   const [replyText, setReplyText] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [imageModalVisible, setImageModalVisible] = useState(false)
+  const [selectedImages, setSelectedImages] = useState([])
 
   const fetchData = async () => {
     try {
@@ -107,6 +109,7 @@ export default function Home() {
                 item?.reviewReply,
                 _(
                   <>
+                  <div className="d-flex gap-2">
                     <button
                       className="rounded-pill btn btn-sm btn-outline-primary"
                       onClick={() => {
@@ -116,6 +119,17 @@ export default function Home() {
                       }}>
                       Reply
                     </button>
+                    {item?.images?.length > 0 && (
+                      <button
+                        className="rounded-pill btn btn-sm btn-outline-info"
+                        onClick={() => {
+                          setSelectedImages(item.images)
+                          setImageModalVisible(true)
+                        }}>
+                        Images
+                      </button>
+                    )}
+                      </div>
                   </>,
                 ),
               ])}
@@ -162,6 +176,61 @@ export default function Home() {
                     </button>
                     <button className="btn btn-primary" onClick={handleReplySubmit}>
                       Submit Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {imageModalVisible && (
+            <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+              <div className="modal-dialog modal-lg modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Review Images</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => {
+                        setImageModalVisible(false)
+                        setSelectedImages([])
+                      }}></button>
+                  </div>
+                  <div className="modal-body">
+                    <div
+                      style={{
+                        maxHeight: '400px',
+                        overflowY: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
+                      }}>
+                      {selectedImages.map((img, i) => (
+                        <img
+                          key={i}
+                          src={img}
+                          alt={`review-${i}`}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '200px',
+                            objectFit: 'contain',
+                            borderRadius: '8px',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="modal-footer">
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => {
+                        setImageModalVisible(false)
+                        setSelectedImages([])
+                      }}>
+                      Close
                     </button>
                   </div>
                 </div>
