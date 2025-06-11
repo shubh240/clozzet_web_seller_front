@@ -1,7 +1,7 @@
 export const currency = 'Rs.';
 export const currentYear = new Date().getFullYear();
-export const developedByLink = 'https://www.linkedin.com/in/jateen-koshti-thedev/';
-export const developedBy = 'Jateen Koshti';
+export const developedByLink = 'https://clozzet.in/';
+export const developedBy = 'Deevek Connect PVT LTD';
 export const contactUs = 'koshtijatin26@gmail.com';
 export const buyLink = '';
 export const basePath = '/seller';
