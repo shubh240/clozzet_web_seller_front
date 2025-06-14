@@ -170,7 +170,7 @@ export default function Home() {
     colors: null,
   })
 
-  const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' }])
+  const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' ,sku:'' }])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -244,8 +244,8 @@ export default function Home() {
         variant: 'warning',
       })
     }
-
-    if (sizeQuantityList.length === 0 || sizeQuantityList.some((item) => !item.size || !item.quantity)) {
+    
+    if (sizeQuantityList.length === 0 || sizeQuantityList.some((item) => !item.size || !item.quantity || !item.sku)) {
       return showNotification({
         message: 'Please enter at least one valid size and quantity',
         variant: 'warning',
@@ -292,13 +292,15 @@ export default function Home() {
         const productId = res?.data?.data?._id
 
         for (const item of sizeQuantityList) {
-          if (item.size && item.quantity) {
+          if (item.size && item.quantity && item.sku) {
+            
             await axios.post(
               `${API_URL_SELLER}productSize/create-productSize`,
               {
                 productId,
                 size: item.size,
                 quantity: item.quantity,
+                sku: item.sku,
               },
               {
                 headers: {
@@ -531,7 +533,7 @@ export default function Home() {
               <label className="form-label">Size & Quantity</label>
               {sizeQuantityList.map((item, index) => (
                 <div className="row mb-2" key={index}>
-                  <div className="col-md-5">
+                  <div className="col-md-3">
                     <input
                       type="text"
                       placeholder="Size (e.g., S, M, L)"
@@ -544,7 +546,7 @@ export default function Home() {
                       }}
                     />
                   </div>
-                  <div className="col-md-5">
+                  <div className="col-md-3">
                     <input
                       type="number"
                       placeholder="Quantity"
@@ -557,13 +559,26 @@ export default function Home() {
                       }}
                     />
                   </div>
+                  <div className="col-md-3">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="SKU"
+                      value={item.sku}
+                      onChange={(e) => {
+                        const updated = [...sizeQuantityList]
+                        updated[index].sku = e.target.value
+                        setSizeQuantityList(updated)
+                      }}
+                    />
+                  </div>
                   <div className="col-md-2 d-flex align-items-center">
                     <button
                       type="button"
                       className="btn btn-danger"
                       onClick={() => {
                         const updated = sizeQuantityList.filter((_, i) => i !== index)
-                        setSizeQuantityList(updated.length > 0 ? updated : [{ size: '', quantity: '' }])
+                        setSizeQuantityList(updated.length > 0 ? updated : [{ size: '', quantity: '',sku:'' }])
                       }}>
                       Delete
                     </button>
@@ -573,7 +588,7 @@ export default function Home() {
               <button
                 type="button"
                 className="btn btn-primary mt-2"
-                onClick={() => setSizeQuantityList([...sizeQuantityList, { size: '', quantity: '' }])}>
+                onClick={() => setSizeQuantityList([...sizeQuantityList, { size: '', quantity: '',sku:'' }])}>
                 + Add Size
               </button>
             </div>

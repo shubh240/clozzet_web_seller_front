@@ -42,6 +42,8 @@ export default function Home() {
 
   const handleInlineUpdate = async (id, field, value) => {
     try {
+      console.log('id, field, value',id, field, value);
+      
       await axios.put(`${API_URL_SELLER}productSize/update-productSize/${id}`, {
         [field]: value,
       }, {
@@ -130,12 +132,24 @@ export default function Home() {
                   />
                 ),
                 _(
+                  <input
+                    type="text"
+                    defaultValue={item.sku}
+                    className="form-control form-control-sm"
+                    onBlur={(e) => {
+                      if (parseInt(e.target.value) !== item.sku) {
+                        handleInlineUpdate(item._id, 'sku', e.target.value)
+                      }
+                    }}
+                  />
+                ),
+                _(
                   <>
                    <button className="rounded-pill btn btn-sm btn-outline-danger" onClick={() => handleDelete(item._id)}>Delete</button>
                   </>
                 ),
               ])}
-              columns={['No', 'Size', 'Quantity', 'Action']}
+              columns={['No', 'Size', 'Quantity','Sku', 'Action']}
               search={true}
               pagination={{ enabled: true, limit: 10 }}
               sort={true}

@@ -15,7 +15,7 @@ export default function Home() {
   const { showNotification } = useNotificationContext()
 
   const [loading, setLoading] = useState(false)
-  const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' }])
+  const [sizeQuantityList, setSizeQuantityList] = useState([{ size: '', quantity: '' ,sku:'' }])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -24,8 +24,8 @@ export default function Home() {
       return showNotification({ message: 'Missing product ID.', variant: 'danger' })
     }
 
-    if (sizeQuantityList.some(item => !item.size || !item.quantity)) {
-      return showNotification({ message: 'Please fill all size and quantity fields.', variant: 'warning' })
+    if (sizeQuantityList.some(item => !item.size || !item.quantity || !item.sku)) {
+      return showNotification({ message: 'Please fill all size , sku and quantity fields.', variant: 'warning' })
     }
 
     try {
@@ -37,6 +37,7 @@ export default function Home() {
             productId,
             size: item.size,
             quantity: item.quantity,
+            sku: item.sku,
           },
           {
             headers: {
@@ -70,7 +71,7 @@ export default function Home() {
           <form onSubmit={handleSubmit}>
             {sizeQuantityList.map((item, index) => (
               <div className="row mb-3" key={index}>
-                <div className="col-md-5">
+                <div className="col-md-3">
                   <input
                     type="text"
                     className="form-control"
@@ -83,7 +84,7 @@ export default function Home() {
                     }}
                   />
                 </div>
-                <div className="col-md-5">
+                <div className="col-md-3">
                   <input
                     type="number"
                     className="form-control"
@@ -96,13 +97,26 @@ export default function Home() {
                     }}
                   />
                 </div>
+                <div className="col-md-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="SKU"
+                    value={item.sku}
+                    onChange={(e) => {
+                      const updated = [...sizeQuantityList]
+                      updated[index].sku = e.target.value
+                      setSizeQuantityList(updated)
+                    }}
+                  />
+                </div>
                 <div className="col-md-2 d-flex align-items-center">
                   <button
                     type="button"
                     className="btn btn-danger"
                     onClick={() => {
                       const updated = sizeQuantityList.filter((_, i) => i !== index)
-                      setSizeQuantityList(updated.length > 0 ? updated : [{ size: '', quantity: '' }])
+                      setSizeQuantityList(updated.length > 0 ? updated : [{ size: '', quantity: '' ,sku:'' }])
                     }}>
                     Delete
                   </button>
@@ -112,7 +126,7 @@ export default function Home() {
             <button
               type="button"
               className="btn btn-primary mb-3"
-              onClick={() => setSizeQuantityList([...sizeQuantityList, { size: '', quantity: '' }])}>
+              onClick={() => setSizeQuantityList([...sizeQuantityList, { size: '', quantity: '',sku:'' }])}>
               + Add Size
             </button>
             <br />
