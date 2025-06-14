@@ -160,7 +160,7 @@ export default function Home() {
                 index + 1,
                 item,
                 item?.name,
-                item?.sku,
+                // item?.sku,
                 item?.brandName,
                 item?.subcategory?.name + ' (' + item?.category?.name + ')' || 'N/A',
               ])}
@@ -184,7 +184,7 @@ export default function Home() {
                   },
                 },
                 'Name',
-                'SKU',
+                // 'SKU',
                 'Brand',
                 'Sub Category',
                 {

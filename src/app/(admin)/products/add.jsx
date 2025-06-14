@@ -157,7 +157,7 @@ export default function Home() {
 
   const [formData, setFormData] = useState({
     name: '',
-    sku: '',
+    // sku: '',
     description: '',
     category: null,
     subcategory: null,
@@ -258,7 +258,7 @@ export default function Home() {
       const form = new FormData()
 
       form.append('name', formData.name)
-      form.append('sku', formData.sku)
+      // form.append('sku', formData.sku)
       form.append('description', formData.description)
       form.append('category', formData.category?.value)
       form.append('subcategory', formData.subcategory)
@@ -351,10 +351,21 @@ export default function Home() {
                   placeholder="Enter product name"
                 />
               </div>
-              <div className="col-md-6">
+                 <div className="col-md-6">
+                <label className="form-label">Brand Name</label>
+                <input
+                  type="text"
+                  name="brandName"
+                  value={formData.brandName}
+                  onChange={handleChange}
+                  className="form-control"
+                  placeholder="Enter brand name"
+                />
+              </div>
+              {/* <div className="col-md-6">
                 <label className="form-label">SKU</label>
                 <input type="text" name="sku" value={formData.sku} onChange={handleChange} className="form-control" placeholder="Enter SKU" />
-              </div>
+              </div> */}
             </div>
 
             <div className="mb-3">
@@ -420,7 +431,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="row mb-3">
+            {/* <div className="row mb-3">
               <div className="col-md-4">
                 <label className="form-label">Brand Name</label>
                 <input
@@ -432,7 +443,7 @@ export default function Home() {
                   placeholder="Enter brand name"
                 />
               </div>
-            </div>
+            </div> */}
             <div className="row mb-3">
               <div className="col-md-4">
                 <label className="form-label">Selling Price</label>

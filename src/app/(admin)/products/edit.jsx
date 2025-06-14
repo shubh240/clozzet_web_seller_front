@@ -154,7 +154,7 @@ export default function Home() {
 
   const [formData, setFormData] = useState({
     name: '',
-    sku: '',
+    // sku: '',
     description: '',
     category: null,
     subcategory: null,
@@ -170,7 +170,7 @@ export default function Home() {
     if (productData) {
       setFormData({
         name: productData.name || '',
-        sku: productData.sku || '',
+        // sku: productData.sku || '',
         description: productData.description || '',
         category: {
           value: productData.category?._id,
@@ -274,7 +274,7 @@ export default function Home() {
       const form = new FormData()
 
       form.append('name', formData.name)
-      form.append('sku', formData.sku)
+      // form.append('sku', formData.sku)
       form.append('description', formData.description)
       form.append('category', formData.category?.value)
       form.append('subcategory', formData.subcategory)
@@ -355,7 +355,7 @@ export default function Home() {
           <form onSubmit={handleSubmit}>
             {/* Product Details */}
             <div className="row mb-3">
-              <div className="col-md-6">
+              {/* <div className="col-md-6"> */}
                 <label className="form-label">Product Name</label>
                 <input
                   type="text"
@@ -365,11 +365,11 @@ export default function Home() {
                   className="form-control"
                   placeholder="Enter product name"
                 />
-              </div>
-              <div className="col-md-6">
+              {/* </div> */}
+              {/* <div className="col-md-6">
                 <label className="form-label">SKU</label>
                 <input type="text" name="sku" value={formData.sku} onChange={handleChange} className="form-control" placeholder="Enter SKU" />
-              </div>
+              </div> */}
             </div>
 
             <div className="mb-3">
