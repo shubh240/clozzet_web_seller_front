@@ -72,7 +72,7 @@ const useSignIn = () => {
       } else {
         // General error handling if no specific error message
         showNotification({
-          message: 'An unknown error occurred',
+          message: e.response?.data?.message,
           variant: 'danger',
         })
       }
