@@ -29,12 +29,10 @@ export default function Home() {
       const payload = {
         sellerId: user?._id,
       }
-      const res = await axios.post(`${API_URL_SELLER}order/list-order`, 
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
+      const res = await axios.post(`${API_URL_SELLER}order/list-order`, payload, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
       })
       setData(res?.data?.data?.orders)
       setLoading(false)
@@ -48,41 +46,40 @@ export default function Home() {
     }
   }
 
-const handleStatusChange = async (orderId, newStatus) => {
-  try {
-    const result = await Swal.fire({
-      title: `Are you sure you want to mark as ${newStatus}?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: `Yes, ${newStatus}`,
-    });
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      const result = await Swal.fire({
+        title: `Are you sure you want to mark as ${newStatus}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: `Yes, ${newStatus}`,
+      })
 
-    if (!result.isConfirmed) return;
+      if (!result.isConfirmed) return
 
-    await axios.put(
-      `${API_URL_SELLER}order/update-order-status/${orderId}`,
-      { status: newStatus },
-      {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
+      await axios.put(
+        `${API_URL_SELLER}order/update-order-status/${orderId}`,
+        { status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
         },
-      }
-    );
+      )
 
-    showNotification({
-      message: `Order status updated to ${newStatus}`,
-      variant: 'success',
-    });
+      showNotification({
+        message: `Order status updated to ${newStatus}`,
+        variant: 'success',
+      })
 
-    fetchData(); // refresh data
-  } catch (err) {
-    showNotification({
-      message: 'Failed to update order status',
-      variant: 'danger',
-    });
+      fetchData() // refresh data
+    } catch (err) {
+      showNotification({
+        message: 'Failed to update order status',
+        variant: 'danger',
+      })
+    }
   }
-};
-
 
   useEffect(() => {
     if (didFetch.current) return
@@ -132,6 +129,7 @@ const handleStatusChange = async (orderId, newStatus) => {
                 'Amount',
                 {
                   name: 'Date',
+                  sort: false,
                   formatter: (cell, row) => {
                     const item = row.cells[0].data
                     return formatToIST(item?.createdAt)
@@ -139,23 +137,29 @@ const handleStatusChange = async (orderId, newStatus) => {
                 },
                 {
                   name: 'Order Status',
+                  sort: false,
                   formatter: (cell, row) => {
-                    const item = row.cells[0].data;
-                    const currentStatus = item?.orderStatus || "Pending";
+                    const item = row.cells[0].data
+                    const currentStatus = item?.orderStatus || 'Pending'
 
-                    return _(
-                      <select
-                        className="form-select form-select-sm"
-                        value={currentStatus}
-                        onChange={(e) => handleStatusChange(item._id, e.target.value)}
-                        disabled={currentStatus !== "Pending"} // Optional: lock after decision
-                        style={{ minWidth: "130px" }}
-                      >
-                        <option value="Pending" disabled>Pending</option>
-                        <option value="Accepted">Accept</option>
-                        <option value="Rejected">Reject</option>
-                      </select>
-                    );
+                    if (currentStatus == 'Pending') {
+                      return _(
+                        <select
+                          className="form-select form-select-sm"
+                          value={currentStatus}
+                          onChange={(e) => handleStatusChange(item._id, e.target.value)}
+                          disabled={currentStatus !== 'Pending'} 
+                          style={{ }}>
+                          <option value="Pending" disabled>
+                            Pending
+                          </option>
+                          <option value="Accepted">Accept</option>
+                          <option value="Rejected">Reject</option>
+                        </select>,
+                      )
+                    } else {
+                      return _(<span className={`badge ${getStatusClass(currentStatus)} rounded-pill`}>{currentStatus}</span>)
+                    }
                   },
                 },
                 {
