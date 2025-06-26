@@ -2,6 +2,11 @@ import IconifyIcon from '@/components/wrappers/IconifyIcon';
 import { Card, CardBody, CardFooter, Col, Row } from 'react-bootstrap';
 import { statData } from '../data';
 import { Link } from 'react-router-dom';
+import { API_URL_SELLER } from '../../../../../context/constants'
+import { useEffect, useState } from 'react';
+import axios from 'axios'
+import { useAuthContext } from '../../../../../context/useAuthContext'
+
 const StatCard = ({
   change,
   icon,
@@ -41,6 +46,47 @@ const StatCard = ({
     </Card>;
 };
 const Stats = () => {
+    const [counts, setCounts] = useState(null);
+  const { user } = useAuthContext()
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL_SELLER}user/seller-dashboard-count`,{
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        }})
+      .then((res) => setCounts(res.data.data))
+      .catch((err) => console.error('Dashboard count error:', err));
+  }, []);
+
+  if (!counts) return <div>Loading...</div>;
+  const dynamicStatData = [
+    {
+      title: "Today's Orders",
+      stat: counts.totalOrdersToday,
+      icon: 'fluent:clipboard-pulse-24-filled',
+      variant: 'primary',
+    },
+    {
+      title: "Today's Revenue",
+      stat: `${counts.totalRevenueToday}`,
+      icon: 'mdi:cash-fast',
+      variant: 'success',
+    },
+    {
+      title: 'Weekly Orders',
+      stat: counts.totalOrdersWeek,
+      icon: 'mdi:calendar-week',
+      variant: 'info',
+    },
+    {
+      title: 'Monthly Revenue',
+      stat: `${counts.totalRevenueMonth}`,
+      icon: 'mdi:cash-multiple',
+      variant: 'warning',
+    },
+  ];
+
   return (
     // <Row>
     //   {stateData.map((stat, idx) => (
@@ -50,7 +96,7 @@ const Stats = () => {
     //   ))}
     // </Row>
     <Row>
-      {statData.map((stat, idx) => <Col md={6} xl={3} key={idx}>
+      {dynamicStatData.map((stat, idx) => <Col md={6} xl={3} key={idx}>
           <StatCard {...stat} />
         </Col>)}
     </Row>
