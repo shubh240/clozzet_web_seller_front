@@ -81,27 +81,28 @@ const handleDownloadInvoice = () => {
     shipment,
     orderStatus,
     transactionId,
-    shipmentHistory
+    shipmentHistory,
+    storeId,
+    sellerId
   } = order;
 
   return (
     <div className="container my-4">
-<div className="d-flex justify-content-end gap-2 mb-3">
-  <Button variant="secondary" onClick={() => navigate('/orders-list')}>
-    ← Back to Orders
-  </Button>
-  <Button variant="outline-primary" onClick={handleDownloadInvoice}>
-    <FaDownload className="me-2" />
-    Download Invoice
-  </Button>
-</div>
-
+      <div className="gap-2 mb-3">
+        <Button variant="secondary" onClick={() => navigate('/orders-list')}>
+          ← Back to Orders
+        </Button>
+        {/* <Button variant="outline-primary" onClick={handleDownloadInvoice}>
+          <FaDownload className="me-2" />
+          Download Invoice
+        </Button> */}
+      </div>
 
       <div className="border p-4 rounded shadow-sm bg-white" ref={invoiceRef}>
         {/* Header */}
         <div className="d-flex justify-content-between mb-4">
           <div>
-            <h3 className="mb-1">INVOICE</h3>
+            <h3 className="mb-1">Order Details</h3>
             <p className="text-muted">Order #: {orderNumber}</p>
             <p className="text-muted">Date: {formatToIST(createdAt)}</p>
             <p className="text-muted">Transaction ID: {transactionId || 'N/A'}</p>
@@ -141,6 +142,21 @@ const handleDownloadInvoice = () => {
           </tbody>
         </table>
 
+        {/* Store & Seller Info */}
+        <h5 className="mt-4 mb-2">Store & Seller Details</h5>
+        <table className="table table-borderless">
+          <tbody>
+            {/* Store Info */}
+            <tr><td><strong>Store Name:</strong></td><td>{storeId?.storeName}</td></tr>
+            <tr><td><strong>Store Address:</strong></td><td>{storeId?.storeAddress}, {storeId?.city}, {storeId?.state}</td></tr>
+
+            {/* Seller Info */}
+            <tr><td><strong>Seller Name:</strong></td><td>{sellerId?.userInfo?.firstName} {sellerId?.userInfo?.lastName}</td></tr>
+            <tr><td><strong>Seller Email:</strong></td><td>{sellerId?.userAuth?.email}</td></tr>
+            <tr><td><strong>Seller Phone:</strong></td><td>+91 {sellerId?.userInfo?.mobileNo}</td></tr>
+          </tbody>
+        </table>
+
         {/* Items List */}
         <h5 className="mt-4 mb-2">Items Ordered</h5>
         <table className="table table-striped">
@@ -148,6 +164,7 @@ const handleDownloadInvoice = () => {
             <tr>
               <th>#</th>
               <th>Product</th>
+              <th>SKU</th>
               <th>Size</th>
               <th>Qty</th>
               <th>Price</th>
@@ -158,6 +175,7 @@ const handleDownloadInvoice = () => {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{item.productName}</td>
+                <td>{item.sku}</td>
                 <td>{item.productSize}</td>
                 <td>{item.quantity}</td>
                 <td>₹{item.amountPerUnit}</td>
@@ -207,7 +225,7 @@ const handleDownloadInvoice = () => {
         {shipment?.pickupAddress && (
           <div className="mb-3">
             <h6>Pickup Location</h6>
-            <p><strong>Store:</strong> {shipment.pickupStoreName}</p>
+            {/* <p><strong>Store:</strong> {shipment.pickupStoreName}</p> */}
             <p>{shipment.pickupAddress}</p>
             {shipment.pickupAddressUrl && (
               <a href={shipment.pickupAddressUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">
