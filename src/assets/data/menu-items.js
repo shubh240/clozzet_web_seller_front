@@ -44,29 +44,31 @@ export const MENU_ITEMS = [
 
     label: 'Orders',
     url: '/orders-list',
-  },
-  {
-    key: 'menuitem',
-    icon: 'solar:share-broken',
-    label: 'Menu Item',
-    children: [
-      {
-        key: 'menu-item-1',
-        label: 'Menu Item 1',
-        parentKey: 'menuitem',
-      },
-      {
-        key: 'menu-item-2',
-        label: 'Menu Item 2',
-        parentKey: 'menuitem',
-        children: [
-          {
-            key: 'menu-sub-item',
-            label: 'Menu Sub Item',
-            parentKey: 'menu-item-2',
-          },
-        ],
-      },
-    ],
-  },
+  }
 ]
+
+
+  // {
+  //   key: 'menuitem',
+  //   icon: 'solar:share-broken',
+  //   label: 'Menu Item',
+  //   children: [
+  //     {
+  //       key: 'menu-item-1',
+  //       label: 'Menu Item 1',
+  //       parentKey: 'menuitem',
+  //     },
+  //     {
+  //       key: 'menu-item-2',
+  //       label: 'Menu Item 2',
+  //       parentKey: 'menuitem',
+  //       children: [
+  //         {
+  //           key: 'menu-sub-item',
+  //           label: 'Menu Sub Item',
+  //           parentKey: 'menu-item-2',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
